@@ -1,0 +1,46 @@
+﻿@model WebAppBugReport.Data.Models.ProjectPagingViewModel
+@using WebAppBugReport.Helpers
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Название компании
+        </th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Projects)
+    {
+        <tr>
+            <td>
+                @item.ProjectName
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+
+            </td>
+            <td>
+                @Html.ActionLink("Перейти", "Index", "Bug", new { id = item.Id }, null)
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+<br />
+<div class="btn-group">
+    @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { page = x }))
+</div>

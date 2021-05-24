@@ -1,0 +1,101 @@
+﻿@model WebAppBugReport.Data.Models.BugPagingViewModel
+@using WebAppBugReport.Helpers
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@if (User.IsInRole("tester")) 
+ { 
+    <p>
+        @Html.ActionLink("Создать новый отчёт", "Create", new { id = @ViewBag.ProjectId })
+    </p>
+ }
+
+
+@ViewBag.UserName
+
+<form method="get">
+    <div class="form-inline">
+        <label class="control-label">Статус: </label>
+        @Html.DropDownList("bugStatus", Model.Statuses as SelectList, htmlAttributes: new { @class = "form-control" })
+
+        <label class="control-label">Програмист: </label>
+        @Html.DropDownList("assignedDev", Model.Users as SelectList, htmlAttributes: new { @class = "form-control" })
+
+        <input type="submit" value="Фильтр" class="btn btn-default" />
+    </div>
+</form>
+<p></p>
+
+<table class="table">
+    <tr>
+        <th>
+            Id
+        </th>
+        <th>
+            Дата
+        </th>
+        <th>
+            Описание
+        </th>
+        <th>
+            Приоритет
+        </th>
+        <th>
+            Статус
+        </th>
+        <th>
+            Результат
+        </th>
+        <th>
+            Назначен на
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Bugs)
+    {
+        <tr>
+            <td>
+                @item.Id
+            </td>
+            <td>
+                @item.Date
+
+            </td>
+            <td>
+                @item.Summary
+            </td>
+            <td>
+                @item.Priority.Name
+            </td>
+            <td>
+                @item.Status.Name
+            </td>
+            <td>
+                @item.Result.Name
+            </td>
+            <td>
+                @item.User.Name
+            </td>
+
+
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+<br />
+<div class="btn-group">
+    @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { page = x }))
+</div>
+
+
