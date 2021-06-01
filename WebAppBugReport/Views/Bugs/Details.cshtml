@@ -1,5 +1,12 @@
 ﻿@model WebAppBugReport.Data.Models.Bug
 
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
 <div>
     <h4>Bug</h4>
     <hr />
@@ -17,7 +24,7 @@
         </dt>
 
         <dd>
-            @ViewBag.PriorityId
+            @Html.DisplayFor(model => model.Project.ProjectName)
         </dd>
 
         <dt>
@@ -89,7 +96,7 @@
         </dt>
 
         <dd>
-            <img src="@Html.DisplayFor(model => model.BugImg)" />
+            @Html.DisplayFor(model => model.BugImg)
         </dd>
 
         <dt>

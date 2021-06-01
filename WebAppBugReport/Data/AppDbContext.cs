@@ -24,6 +24,8 @@ namespace WebAppBugReport.Data
 
 
 
+
+
     }
 
 
@@ -39,26 +41,51 @@ namespace WebAppBugReport.Data
             db.Results.Add(new Result { Name = "Unverified" });
 
             db.Statuses.Add(new Status { Name = "Open" });
-            db.Statuses.Add(new Status { Name = "Done" });
+            db.Statuses.Add(new Status { Name = "Queue" });
             db.Statuses.Add(new Status { Name = "In Progress" });
-            db.Statuses.Add(new Status { Name = "Cannot Reproduce" });
-            db.Statuses.Add(new Status { Name = "Pause" });
+            db.Statuses.Add(new Status { Name = "In Review" });
             db.Statuses.Add(new Status { Name = "Not a Bug" });
-            db.Statuses.Add(new Status { Name = "Needed more info" });
+            db.Statuses.Add(new Status { Name = "Close" });
+            
 
             db.Roles.Add(new Role { Name = "tester" });
             db.Roles.Add(new Role { Name = "developer" });
 
 
-            db.Users.Add(new User { Name = "Владик", Email="testet@tester.com", Password="Test123!", RoleId= 1});
-            db.Users.Add(new User { Name = "Маша", Email = "dev@dev.com", Password = "Test123!", RoleId = 2 });
 
+            User s1 = new User { Id = 1, Name = "Егор", Email = "testet@tester.com", Password = "Test123!", RoleId = 1 };
+            User s2 = new User { Id = 2, Name = "Мария", Email = "dev@dev.com", Password = "Test123!", RoleId = 2 };
+            User s3 = new User { Id = 3, Name = "Олег", Email = "random@random.com", Password = "Test123!", RoleId = 2 };
+            User s4 = new User { Id = 4, Name = "Ольга", Email = "initial@initial.com", Password = "Test123!", RoleId = 2 };
 
+            db.Users.Add(s1);
+            db.Users.Add(s2);
+            db.Users.Add(s3);
+            db.Users.Add(s4);
 
+            Project c1 = new Project
+            {
+                Id = 1,
+                ProjectName = "Операционные системы",
+                Users = new List<User>() { s1, s2, s3 }
+            };
+            Project c2 = new Project
+            {
+                Id = 2,
+                ProjectName = "Алгоритмы и структуры данных",
+                Users = new List<User>() { s2, s4 }
+            };
+            Project c3 = new Project
+            {
+                Id = 3,
+                ProjectName = "Основы HTML и CSS",
+                Users = new List<User>() { s3, s4, s1 }
+            };
 
-            /*db.Users.Add(new User { Name = "Маша" });
-            db.Users.Add(new User { Name = "Таня" });
-            db.Users.Add(new User { Name = "Саша" });*/
+            db.Projects.Add(c1);
+            db.Projects.Add(c2);
+            db.Projects.Add(c3);
+
 
 
 

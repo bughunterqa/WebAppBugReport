@@ -1,0 +1,31 @@
+﻿.backHeader {
+
+    background: linear-gradient(to right, #734b6d, #42275a); 
+}
+
+.backHeader a {
+    color: white;
+}
+
+.row-padding{
+    padding-top: 18px;
+}
+
+.control-label {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    display: inline-block;
+    margin-bottom: .5rem;
+}
+
+#footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    padding: 10px;
+    background: linear-gradient(to right, #734b6d, #42275a);
+    color: #fff;
+    width: 100%;
+}

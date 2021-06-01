@@ -1,0 +1,101 @@
+﻿@using WebAppBugReport.Data.Models
+@model  Project
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Информация о проекте</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ProjectName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ProjectName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+
+        <table class="table">
+            <tr>
+                <th>
+                    Имена пользователей
+                </th>
+                <th>
+                    Почта
+                </th>
+                <th>
+                    Роль
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (User user in ViewBag.Users)
+             {
+                <tr>
+                    @if (user.Projects.Contains(ViewBag.Project))
+                    {
+                        <td>
+                            @user.Name
+                        </td>
+                        <td>
+                            @user.Email
+                        </td>
+                        <td>
+                            @user.Role.Name
+                        </td>
+                        <td>
+                            @Html.Hidden("id", user.Id)
+                        </td>
+                        
+                     }
+                </tr>
+             }
+        </table>
+        @using (Ajax.BeginForm("DeleteUser1", new AjaxOptions
+            {UpdateTargetId = "results", Confirm="Вы действительно хотите удалить пользователя из проекта?" , InsertionMode = InsertionMode.InsertBefore}))
+         {
+            @Html.Hidden("projectId", @ViewBag.ProjectId as string)
+            <input type="submit" value="Delete" class="btn btn-default" /> 
+                            
+      
+                @*<td>
+                @Html.ActionLink("Удалить", "DeleteUser1", "Projects", new { id = user.Id, projectId = @ViewBag.ProjectId }, null)
+            </td>*@
+         }
+        <div id="results"></div>
+        <br />
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#submit').click(function (e) {
+                e.preventDefault();
+                var name = $('#name').val();
+                name = encodeURIComponent(name);
+                $('#results').load('@Url.Action("DeleteUser1") ? name=' + name);
+            });
+        });
+    </script>
+       }

@@ -6,6 +6,9 @@ using System.Web.Mvc;
 using WebAppBugReport.Data;
 using WebAppBugReport.Data.Models;
 using System.Data.Entity;
+using System.IO;
+using System.Threading.Tasks;
+using System.Net;
 
 namespace WebAppBugReport.Controllers
 {
@@ -13,7 +16,7 @@ namespace WebAppBugReport.Controllers
     {
         AppDbContext db = new AppDbContext();
 
-        public ActionResult Index(int? id, int? bugStatus, int? assignedDev, int page = 1)
+        public ActionResult Index(int id, int? bugStatus, int? assignedDev, int page = 1)
         {
             ViewBag.ProjectId = id;
             int pageSize = 3;
@@ -23,7 +26,7 @@ namespace WebAppBugReport.Controllers
                 .Include(p => p.Status)
                 .Include(p => p.User)
                 .Where(p => p.ProjectId == id)
-                .OrderBy(x => x.Id)
+                .OrderByDescending(x => x.Id)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
@@ -70,7 +73,6 @@ namespace WebAppBugReport.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "testet")]
         public ActionResult Create(int? id)
         {
             ViewBag.PriorityId = new SelectList(db.Priorities, "Id", "Name");
@@ -82,6 +84,7 @@ namespace WebAppBugReport.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "tester")]
         public ActionResult Create(Bug bug)
         {
             ViewBag.PriorityId = new SelectList(db.Priorities, "Id", "Name");
@@ -89,6 +92,16 @@ namespace WebAppBugReport.Controllers
             ViewBag.StatusId = new SelectList(db.Statuses, "Id", "Name");
             ViewBag.UserId = new SelectList(db.Users, "Id", "Name");
             bug.Date = DateTime.Now;
+
+            string strDateTime = DateTime.Now.ToString("ddMMyyyyHHMMss");
+            string finalPath = "\\UploadedFile\\" + strDateTime + bug.UploadFile.FileName;
+
+            bug.UploadFile.SaveAs(Server.MapPath("~") + finalPath);
+            bug.BugImg = finalPath;
+
+
+
+
             db.Bugs.Add(bug);
             db.SaveChanges();
             return RedirectToAction("Index", new { id = bug.ProjectId });
@@ -108,15 +121,6 @@ namespace WebAppBugReport.Controllers
             }
 
 
-            /*Bug fullBug = db.Bugs
-                .Include(p => p.Priority)
-                .Include(p => p.Result)
-                .Include(p => p.Status)
-                .Include(p => p.User)
-                .Where(t => t.Id == id);*/
-
-
-
             ViewBag.PriorityId = new SelectList(db.Priorities, "Id", "Name");
             ViewBag.ResultId = new SelectList(db.Results, "Id", "Name");
             ViewBag.StatusId = new SelectList(db.Statuses, "Id", "Name");
@@ -125,5 +129,39 @@ namespace WebAppBugReport.Controllers
 
             return View(bug);
         }
+
+        public ActionResult TestCard()
+        {
+
+            IEnumerable<Bug> bug = db.Bugs
+                .Include(p=>p.Status)
+                .ToList();
+
+            return View(bug);
+        }
+
+
+        [HttpPost]
+        public ActionResult Edit(int id, int statusId)
+        {
+            Bug bug = db.Bugs.Find(id);
+
+            bug.StatusId = statusId;
+
+
+
+            if (ModelState.IsValid)
+            {
+                db.Entry(bug).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(bug);
+        }
+
+
+
+
+
     }
 }

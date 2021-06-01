@@ -1,0 +1,87 @@
+﻿@using WebAppBugReport.Data.Models
+@model ProjectPagingViewModel
+
+
+@using WebAppBugReport.Helpers
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Доступные проекты</h2>
+
+@if (User.IsInRole("tester"))
+{
+    <p>
+        @Html.ActionLink("Создать новый проект", "Create", "Projects")
+    </p>
+}
+<br />
+<br />
+<br />
+
+
+<div id="modDialog" class="modal fade">
+    <div id="dialogContent" class="modal-dialog"></div>
+</div>
+
+
+<table class="table">
+    <tr>
+        <th>
+            Название компании
+        </th>
+
+    </tr>
+    
+    @foreach (Project project in Model.Projects)
+    {
+        <tr>
+            @if (project.Users.Contains(ViewBag.Users))
+            {
+                <td>
+                    @project.ProjectName
+                </td>
+                <td>
+                    @Html.ActionLink("Изменить", "Edit", "Projects", new { id = project.Id }, null) |
+                </td>
+                <td>
+                    @Html.ActionLink("Перейти", "Index", "Bug", new { id = project.Id }, null) |
+                </td>
+                <td>
+                    @Html.ActionLink("Детали", "Details", "Projects", new { id = project.Id }, new { @class = "compItem" }) |
+                </td>
+                <td>
+                    @Html.ActionLink("Delete", "Delete", new { id = project.Id })
+                </td>
+
+            }
+
+        </tr>
+    }
+
+</table>
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(function () {
+            $.ajaxSetup({ cache: false });
+           $(".compItem").click(function (e) {
+
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                });
+            });
+        })
+    </script>
+}
+<br />
+
+<div class="btn-group">
+    @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { page = x }))
+</div>
+
+

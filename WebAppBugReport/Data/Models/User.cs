@@ -10,7 +10,7 @@ namespace WebAppBugReport.Data.Models
     {
         public int Id { get; set; }
              
-        [Display(Name = "User")]
+        [Display(Name = "Пользователь")]
         public string Name { get; set; }
         public string Email { get; set; }    
         public string Password { get; set; }
@@ -18,6 +18,17 @@ namespace WebAppBugReport.Data.Models
 
         public int RoleId { get; set; }
         public Role Role { get; set; }
+
+
+        public virtual ICollection<Project> Projects { get; set; }
+        public User()
+        {
+            Projects = new List<Project>();
+        }
+
+
+
+
     }
 
 

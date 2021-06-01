@@ -11,7 +11,7 @@
 @if (User.IsInRole("tester")) 
  { 
     <p>
-        @Html.ActionLink("Создать новый отчёт", "Create", new { id = @ViewBag.ProjectId })
+        @Html.ActionLink("Создать новый отчёт", "Create", "Bug",  new { id = @ViewBag.ProjectId }, null)
     </p>
  }
 
@@ -59,6 +59,7 @@
 
     @foreach (var item in Model.Bugs)
     {
+        
         <tr>
             <td>
                 @item.Id
@@ -76,9 +77,9 @@
             <td>
                 @item.Status.Name
             </td>
-            <td>
+            @*<td>
                 @item.Result.Name
-            </td>
+            </td>*@
             <td>
                 @item.User.Name
             </td>

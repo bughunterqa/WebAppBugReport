@@ -15,8 +15,11 @@ namespace WebAppBugReport.Controllers
 {
     public class AccountController : Controller
     {
+        AppDbContext db = new AppDbContext();
         public ActionResult Register()
         {
+            ViewBag.RoleId = new SelectList(db.Roles, "Id", "Name");
+
             return View();
         }
 
@@ -26,16 +29,20 @@ namespace WebAppBugReport.Controllers
         {
             if (ModelState.IsValid)
             {
+               
+
+
                 User user = null;
                 using (AppDbContext db = new AppDbContext())
                 {
                     user = db.Users.FirstOrDefault(u => u.Email == model.Email);
+                    ViewBag.RoleId = new SelectList(db.Roles, "Id", "Name");
                 }
                 if (user == null)
                 {
                     using (AppDbContext db = new AppDbContext())
                     {
-                        db.Users.Add(new User { Name = model.Name, Email = model.Email, Password = model.Password, RoleId=2 });
+                        db.Users.Add(new User { Name = model.Name, Email = model.Email, Password = model.Password, RoleId = model.RoleId });
                         db.SaveChanges();
 
                         user = db.Users.Where(u => u.Email == model.Email && u.Password == model.Password).FirstOrDefault();
@@ -75,7 +82,7 @@ namespace WebAppBugReport.Controllers
                 if (user != null)
                 {
                     FormsAuthentication.SetAuthCookie(model.Email, true);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Projects");
                 }
                 else
                 {
@@ -85,21 +92,13 @@ namespace WebAppBugReport.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Logout()
         {
-           
+            FormsAuthentication.SignOut();
             return RedirectToAction("Login", "Account");
         }
 
 
-        private AuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
-        }
+
     }
 }

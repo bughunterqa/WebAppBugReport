@@ -1,8 +1,9 @@
-﻿using System;
+﻿  using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using WebAppBugReport.Data.Models;
 
 namespace WebAppBugReport.Data.ViewModels
 {
@@ -29,5 +30,8 @@ namespace WebAppBugReport.Data.ViewModels
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Пароли не совпадают")]
         public string Password { get; set; }
+
+        public int RoleId { get; set; }
+        public Role Role { get; set; }
     }
 }

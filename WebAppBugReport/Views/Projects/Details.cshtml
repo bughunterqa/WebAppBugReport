@@ -1,0 +1,15 @@
+﻿@model WebAppBugReport.Data.Models.Project
+
+<div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal" area-hidden="true">X</button>
+        <h4>Модель компьютера</h4>
+    </div>
+    <div class="modal-body">
+        <dl class="dl-horizontal">
+            <dt>Название модели:</dt>
+            <dd>@Html.DisplayFor(model => model.ProjectName)</dd>
+
+        </dl>
+    </div>
+</div>

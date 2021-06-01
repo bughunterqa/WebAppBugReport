@@ -1,4 +1,7 @@
-﻿@model WebAppBugReport.Data.Models.ProjectPagingViewModel
+﻿@using WebAppBugReport.Data.Models
+@model ProjectPagingViewModel
+
+
 @using WebAppBugReport.Helpers
 
 @{
@@ -7,9 +10,12 @@
 
 <h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+@if (User.IsInRole("tester"))
+{
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+}
 <table class="table">
     <tr>
         <th>
@@ -20,27 +26,34 @@
         <th></th>
     </tr>
 
-    @foreach (var item in Model.Projects)
+    @foreach (Project project in Model.Projects)
     {
         <tr>
-            <td>
-                @item.ProjectName
+            @if (project.Users.Contains(ViewBag.Users))
+             {
+             <td>
+                @project.ProjectName
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Изменить", "Edit", "Projects", new { id = project.Id }, null) |
 
             </td>
             <td>
-                @Html.ActionLink("Перейти", "Index", "Bug", new { id = item.Id }, null)
+                @Html.ActionLink("Перейти", "Index", "Bug", new { id = project.Id }, null)
             </td>
             <td>
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @Html.ActionLink("Delete", "Delete", new { id = project.Id })
             </td>
+                
+             }
+            
         </tr>
     }
 
 </table>
 <br />
+        
 <div class="btn-group">
-    @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { page = x }))
+        @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { page = x }))
 </div>
+        

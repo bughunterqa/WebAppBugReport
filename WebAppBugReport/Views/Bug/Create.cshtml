@@ -1,127 +1,95 @@
 ﻿@model WebAppBugReport.Data.Models.Bug
 
+
+
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Bug - Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create</h2>
+<h2>Creating bug</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Create", "Bug", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>Bug</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Summary, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Summary, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Summary, "", new { @class = "text-danger" })
-            </div>
+
+    <form class="row g-3 ">
+        <div class="col-md-12 row-padding">
+            @Html.LabelFor(model => model.Summary, htmlAttributes: new { @class = "control-label " })
+            @Html.EditorFor(model => model.Summary, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 100%", placeholder = "What? Where? When? " } })
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
 
-                @Html.TextArea("Description", "привет <br/> мир", 5, 50, null)
-                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-            </div>
+
+
+        <div class="col-md-4 row-padding">
+            @Html.LabelFor(model => model.Priority.Name, htmlAttributes: new { @class = "control-label " })
+            @Html.DropDownList("PriorityId", null, htmlAttributes: new { @class = "form-control", @style = "max-width: 100%" })
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ExpectedResult, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextArea("ExpectedResult", "привет <br/> мир", 5, 50, null)
-                @Html.ValidationMessageFor(model => model.ExpectedResult, "", new { @class = "text-danger" })
-            </div>
+        <div class="col-md-4 row-padding">
+            @Html.LabelFor(model => model.User.Name, htmlAttributes: new { @class = "control-label " })
+            @Html.DropDownList("UserId", null, htmlAttributes: new { @class = "form-control", @style = "max-width: 100%" })
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ActualResult, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextArea("ActualResult", "привет <br/> мир", 5, 50, null)
-                @Html.ValidationMessageFor(model => model.ActualResult, "", new { @class = "text-danger" })
-            </div>
+        <div class="col-md-4 row-padding">
+            @Html.LabelFor(model => model.Status.Name, htmlAttributes: new { @class = "control-label " })
+            @Html.DropDownList("StatusId", null, htmlAttributes: new { @class = "form-control", @style = "max-width: 100%" })
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.StepToReproduce, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextArea("StepToReproduce", "привет <br/> мир", 5, 50, null)
-                @Html.ValidationMessageFor(model => model.StepToReproduce, "", new { @class = "text-danger" })
-            </div>
+
+
+
+        <div class="col-md-5 row-padding">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label " })
+            @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @style = "max-width: 100%" })
+        </div>
+        <div class="col-md-7 row-padding">
+            @Html.LabelFor(model => model.ActualResult, htmlAttributes: new { @class = "control-label " })
+            @Html.TextAreaFor(m => m.ActualResult, new { @class = "form-control", @style = "max-width: 100%" })
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Attachment, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Attachment, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Attachment, "", new { @class = "text-danger" })
-            </div>
+
+
+        <div class="col-md-5 row-padding">
+            @Html.LabelFor(model => model.StepToReproduce, htmlAttributes: new { @class = "control-label" })
+            @Html.TextAreaFor(m => m.StepToReproduce, new { @class = "form-control", @style = "max-width: 100%", placeholder = "1..." })
+        </div>
+        <div class="col-md-7 row-padding">
+            @Html.LabelFor(model => model.ExpectedResult, htmlAttributes: new { @class = "control-label" })
+            @Html.TextAreaFor(m => m.ExpectedResult, new { @class = "form-control", @style = "max-width: 100%" })
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
-            </div>
+
+
+        <div class="col-md-8 row-padding">
+            @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 100%" } })
+            @Html.Hidden("ProjectId")
+        </div>
+        <div class="col-md-4 row-padding">
+            @Html.LabelFor(model => model.Link, htmlAttributes: new { @class = "control-label " })
+            @Html.EditorFor(model => model.Link, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 100%", placeholder = "https://..." } })
+        </div>
+        
+
+        <div class="col-md-12 row-padding">
+            @Html.LabelFor(model => model.BugImg, htmlAttributes: new { @class = "control-label " })
+            <input type="file" name="UploadFile" class="form-control" />
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Link, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Link, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Link, "", new { @class = "text-danger" })
-            </div>
+
+
+        <div class="col-md-9  row-padding" style="min-width: 200px">
+            <input type="submit" value="Create" class="btn btn-primary" />
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.PriorityId, "PriorityId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("PriorityId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.PriorityId, "", new { @class = "text-danger" })
-            </div>
+        <div class="col-md-3 btn btn-link " >
+            @Html.ActionLink("Back to List", "Index")
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.StatusId, "StatusId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("StatusId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.StatusId, "", new { @class = "text-danger" })
-            </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ResultId, "ResultId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("ResultId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.ResultId, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.UserId, "UserId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("UserId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div>
-            @Html.Hidden("ProjectId", @ViewBag.ProjectId as string)
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
+    </form>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
