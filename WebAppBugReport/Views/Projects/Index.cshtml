@@ -8,17 +8,20 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Доступные проекты</h2>
+<h2 class="row-padding">
+    Available Projects
+    @if (User.IsInRole("QA Engineer"))
+    {
+        <a href="/Projects/Create/" class="btn"><i class="fa fa-plus btn-lg"></i></a>
+    }
+</h2>
 
-@if (User.IsInRole("tester"))
-{
-    <p>
-        @Html.ActionLink("Создать новый проект", "Create", "Projects")
-    </p>
-}
-<br />
-<br />
-<br />
+
+
+
+
+
+
 
 
 <div id="modDialog" class="modal fade">
@@ -26,48 +29,40 @@
 </div>
 
 
-<table class="table">
-    <tr>
-        <th>
-            Название компании
-        </th>
-
-    </tr>
-    
+<div class="row">
     @foreach (Project project in Model.Projects)
     {
-        <tr>
-            @if (project.Users.Contains(ViewBag.Users))
-            {
-                <td>
-                    @project.ProjectName
-                </td>
-                <td>
-                    @Html.ActionLink("Изменить", "Edit", "Projects", new { id = project.Id }, null) |
-                </td>
-                <td>
-                    @Html.ActionLink("Перейти", "Index", "Bug", new { id = project.Id }, null) |
-                </td>
-                <td>
-                    @Html.ActionLink("Детали", "Details", "Projects", new { id = project.Id }, new { @class = "compItem" }) |
-                </td>
-                <td>
-                    @Html.ActionLink("Delete", "Delete", new { id = project.Id })
-                </td>
+        if (project.Users.Contains(ViewBag.Users))
+        {
+            <div class="col-md-4 " style="padding-top:40px">
+                <div class="card card-body-project wide ">
+                    <div class="card-title navbar-brand" style="background: #5B7065;  color:#d5d5db; height: 40px; text-align: center; padding-top: 10px; font-size:15px; width:100%"> @project.ProjectName</div>
+                    <div class="card ">
+                        <img src="~/UploadedFile/iconfinder_18333_folder_grey_icon_128px.png" class="card-img-top center-block">
+                        <div class="card-body">
+                            <div class="btn-group  " role="group" style="width:100% ">
+                                <a href="/Bug/ListBugs/@project.Id" class="btn btn-primary  " style="width:50%">GO</a>
 
-            }
+                                <a href="/Projects/Details/@project.Id" class="btn btn-primary" style="width:50%">Details</a>
 
-        </tr>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
     }
+</div>
 
-</table>
+
 @section scripts
 {
     <script type="text/javascript">
 
         $(function () {
             $.ajaxSetup({ cache: false });
-           $(".compItem").click(function (e) {
+            $(".compItem").click(function (e) {
 
                 e.preventDefault();
                 $.get(this.href, function (data) {
@@ -80,8 +75,8 @@
 }
 <br />
 
-<div class="btn-group">
-    @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { page = x }))
-</div>
+@*    <div class="btn-group">
+        @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { page = x }))
+    </div>*@
 
 

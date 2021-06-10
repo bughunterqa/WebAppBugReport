@@ -1,0 +1,105 @@
+﻿@model WebAppBugReport.Data.Models.User
+
+@{
+    ViewBag.Title = "UserProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="row-padding">User Profile</h2>
+<div>
+
+
+    <img class="img-button  img-circle " src="@ViewBag.Photo" style=" width:140px; height:auto;   cursor:pointer;">
+
+
+
+    <hr />
+    <dl class="dl-horizontal">
+
+
+        <dt>
+            Role
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Role.Name)
+        </dd>
+        <dt>
+            Name
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+    </dl>
+</div>
+<p>
+    <button type="button"  class="btn btn-primary" data-toggle="modal" data-target="#editUserProfile">Edit</button>
+</p>
+
+
+
+<div class="modal fade" id="editUserProfile" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Profile</h5>
+            </div>
+            @using (Html.BeginForm("EditUserProfile", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                
+                    <div class="modal-body">
+
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.Id)
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Name</label>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Email</label>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Photo</label>
+                                <div class="col-md-10">
+                                    @Html.HiddenFor(model => model.ProfileImg, new { htmlAttributes = new { @class = "form-control" } })
+                                    <input type="file" name="UploadPhoto" class="form-control" />
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Change</button>
+                    </div>
+               
+            }
+        </div>
+    </div>
+</div>

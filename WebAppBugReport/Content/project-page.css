@@ -1,0 +1,10 @@
+﻿.card-body-project {
+    width: 22rem;
+    background: #04202C;
+    border-radius: 10px;
+}
+
+
+.wide {
+    overflow: hidden;
+}

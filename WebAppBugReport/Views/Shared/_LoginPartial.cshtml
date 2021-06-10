@@ -7,17 +7,17 @@
 
         <ul class="nav navbar-nav navbar-right">
             <li>
-                @Html.ActionLink( User.Identity.Name , "#", "#", routeValues: null, htmlAttributes: new { title = "Manage" })
+                @Html.ActionLink( User.Identity.Name , "UserProfile", "Account", new {  },new{ style = "line-height: 40px;" })
             </li>
-            <li>@Html.ActionLink("Выйти", "Logout", "Account")</li>
+            <li>@Html.ActionLink("Log Off", "Logout", "Account",new {}, new { @class = "navbar-brand", style = "line-height: 40px;" })</li>
         </ul>
     }
 }
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        <li>@Html.ActionLink("Register", "Register", "Account",  new { id = "registerLink" }, new { style = "line-height: 40px;" })</li>
+        <li>@Html.ActionLink("Log in", "Login", "Account",   new { id = "loginLink" }, new { style = "line-height: 40px;" })</li>
     </ul>
 }
 

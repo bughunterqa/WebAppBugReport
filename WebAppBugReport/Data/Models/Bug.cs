@@ -12,34 +12,31 @@ namespace WebAppBugReport.Data.Models
     {
         public int Id { get; set; }
 
-        [Display(Name = "Заглавие")]
         public string Summary { get; set; }
 
-        [Display(Name = "Описание")]
         public string Description { get; set; }
 
-        [Display(Name = "Ожидаемый результат")]
+        [Display(Name = "Expected Result")]
         public string ExpectedResult { get; set; }
 
-        [Display(Name = "Фактический результат")]
+        [Display(Name = "Actual Result")]
         public string ActualResult { get; set; }
 
-        [Display(Name = "Шаги для воспроизведения")]
+        [Display(Name = "Step to Reproduce")]
         public string StepToReproduce { get; set; }
 
-        [Display(Name = "Скриншот")]
+        [Display(Name = "Attachment")]
         public string BugImg { get; set; }
         [NotMapped]
         public HttpPostedFileBase UploadFile { get; set; }
 
-        [Display(Name = "Комментарий")]
         public string Comment { get; set; }
 
-        [Display(Name = "Ссылка")]
         public string Link { get; set; }
 
-        [Display(Name = "Дата")]
         public DateTime Date { get; set; }
+
+        public DateTime? Updated { get; set; }
 
 
 
@@ -66,7 +63,7 @@ namespace WebAppBugReport.Data.Models
     public class Priority
     {
         public int Id { get; set; }
-        [Display(Name = "Приоритет")]
+        [Display(Name = "Priority")]
         public string Name { get; set; }
     }
 
@@ -80,7 +77,7 @@ namespace WebAppBugReport.Data.Models
     public class Status
     {
         public int Id { get; set; }
-        [Display(Name = "Статус")]
+        [Display(Name = "Status")]
         public string Name { get; set; }
     }
 
@@ -110,5 +107,9 @@ namespace WebAppBugReport.Data.Models
         public SelectList Users { get; set; }
     }
 
-
+    public class BugList
+    {
+        public IEnumerable<Bug> Bugs { get; set; }
+        public IEnumerable<Status> Statuses { get; set; }
+    }
 }

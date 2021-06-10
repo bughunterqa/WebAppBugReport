@@ -66,44 +66,22 @@ namespace WebAppBugReport.Controllers
         }
 
 
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Project project = db.Projects.Find(id);
-            if (project == null)
-            {
-                return HttpNotFound();
-            }
-
-            List<User> users = db.Users
-                .Include(p=>p.Role)
-                .ToList();
-
-            ViewBag.ProjectId = id;
-            ViewBag.Project = project;
-            ViewBag.Users = users;
-
-            return View(project);
-        }
-
-
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,ProjectName")] Project project)
+        public ActionResult Edit(string projectName, int projectId)
         {
 
-            Project newProject = db.Projects.Find(project.Id);
-            newProject.ProjectName = project.ProjectName;
-
+            Project project = db.Projects.Find(projectId);
+            if(project != null)
+            {
+                project.ProjectName = projectName;
+            }
+            
             if (ModelState.IsValid)
             {
-                db.Entry(newProject).State = EntityState.Modified;
+                db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index", "Projects");
+                return RedirectToAction("Details", new { id = projectId });
 
             }
 
@@ -114,21 +92,8 @@ namespace WebAppBugReport.Controllers
 
 
 
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Project project = db.Projects.Find(id);
-            if (project == null)
-            {
-                return HttpNotFound();
-            }
-            return View(project);
-        }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
@@ -140,40 +105,73 @@ namespace WebAppBugReport.Controllers
         }
 
 
-     /*   public ActionResult DeleteUser(int? id, int projectId)
+        public ActionResult DeleteUserFromProject( int projectId, int id)
         {
             Project project = db.Projects.Find(projectId);
             User user = project.Users.First(p => p.Id == id);
 
-            ViewBag.Id = id;
-            ViewBag.ProjectId = projectId;
-            if (project != null)
-                return View(project);
+            if (project != null && user != null)
+            {
+                project.Users.Remove(user);
+                db.SaveChanges();
+            }
+            return RedirectToAction("Details", new { id = projectId });
+        }
 
 
-            
-            return HttpNotFound();
-        }*/
+
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Project project = db.Projects.Find(id);
+            if (project == null)
+            {
+                return HttpNotFound();
+            }
+
+            ViewBag.Name = project.ProjectName;
+
+            List<User> users = db.Users
+                .Include(p => p.Role)
+                .ToList();
+
+            ViewBag.ProjectId = id;
+            ViewBag.Project = project;
+            ViewBag.Users = users;
+
+            return View(project);
+        }
+
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteUser1(int id, int projectId)
+        public ActionResult AddUserToProject(string email, int projectId)
         {
-            Project project = db.Projects.Find(projectId);
-            User user = project.Users.First(p => p.Id == id);
-            user.Projects.Remove(project);
-            db.SaveChanges();
-            return PartialView(user);
+            
+            User user = db.Users.Where(p => p.Email == email).FirstOrDefault();
+            if(user != null)
+            {
+                Project project = db.Projects.Find(projectId);
+
+
+                if (!project.Users.Contains(user))
+                {
+                    project.Users.Add(user);
+                    db.SaveChanges();
+                   
+                }
+            }
+
+            return RedirectToAction("Details", new { id = projectId });
+
+
+
         }
 
 
-        public ActionResult Details(int id)
-        {
-            Project project = db.Projects.Find(id);
-            if (project != null)
-                return PartialView(project);
-            return HttpNotFound();
-        }
+
 
 
 

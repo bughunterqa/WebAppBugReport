@@ -16,24 +16,35 @@ namespace WebAppBugReport.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: Bugs
-        public ActionResult Index()
+        public ActionResult TestCard1()
         {
-            var bugs = db.Bugs.Include(b => b.Priority).Include(b => b.Project).Include(b => b.Result).Include(b => b.Status).Include(b => b.User);
-            return View(bugs.ToList());
+
+            List<Status> statuses = db.Statuses.ToList();
+
+
+            
+
+            List<Bug> bug = db.Bugs
+                .Include(p => p.Status)
+                .Include(p => p.Priority)
+                .ToList();
+
+            BugList bugList = new BugList
+            {
+                Statuses = statuses,
+                Bugs = bug
+            };
+
+            return View(bugList);
         }
+
 
         // GET: Bugs/Details/5
         public ActionResult Details(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             Bug bug = db.Bugs.Find(id);
-            if (bug == null)
-            {
-                return HttpNotFound();
-            }
+
+
             return View(bug);
         }
 

@@ -1,0 +1,309 @@
+﻿@model WebAppBugReport.Data.Models.BugList
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2 style="padding-top:30px">
+    Bugs List @*🅱🆄🅶🅱🆄🅽🆃🅴🆁*@
+    @if (User.IsInRole("QA Engineer"))
+    {
+        <a href="/Bug/Create/@ViewBag.ProjectId" class="btn"><i class="fa fa-plus btn-lg"></i></a>
+    }
+</h2>
+
+
+
+
+@foreach (var status in Model.Statuses)
+{
+    <div class="column-header-test ">
+
+
+        <div class="card column back-column " data-id="@status.Id">
+            <div style="padding-bottom:20px; font-size:16px">@status.Name</div>
+
+
+            @foreach (var item in Model.Bugs)
+            {
+                if (item.StatusId == @status.Id)
+                {
+
+                    <div class="portlet card-body text-left  " data-id="@item.Id">
+                        <div class="portlet-header ard-title ">
+                            @*<img class="img-button  img-circle " src="@item.User.ProfileImg" style=" width:30px; height:auto; float:right;  cursor:pointer;">*@
+
+                            <div>
+                                ID# @item.Id
+                                @if (item.Priority.Name == "Low")
+                                {
+                                    <i class="bi bi-bug " style="cursor:pointer; float:right; color:green " data-toggle="tooltip" data-placement="left" title="Priority: @item.Priority.Name"></i>
+                                }
+                                else if (item.Priority.Name == "Medium")
+                                {
+                                    <i class="bi bi-bug " style="cursor:pointer; float:right; color:orange " data-toggle="tooltip" data-placement="left" title="Priority: @item.Priority.Name"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-bug " style="cursor:pointer; float:right; color:red " data-toggle="tooltip" data-placement="left" title="Priority: @item.Priority.Name"></i>
+                                }
+                            </div>
+
+
+                        </div>
+
+                        <div class="portlet-content  card-text">@item.Summary</div>
+
+
+
+
+
+                        <div class="row" >
+                            
+                            <div class="col-md-2 card-elem-padding-img" >
+                                <i class="bi bi-images img-button" src="@item.BugImg"  style="cursor:pointer; font-size:30px; "></i>
+                            </div>
+
+
+                            <div class=" col-md-7 card-elem-padding-details">
+                                <button type="button" class="btn btn-primary form-control open-details-modal" data-toggle="modal" style="background:#336B87;" data-whatever="@item.Id">Details  </button>
+
+                                <div class="modal fade details-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-xl" role="document" style="min-width:1300px; min-height:2600px">
+                                        <div class="modal-content">
+                                            @foreach (var bug in Model.Bugs.Where(p => p.Id == @item.Id))
+                                            {
+                                                <div class="modal-header text-left" style="background-color:#283655">
+                                                    <h5 class="modal-title" id="exampleModalLabel" style="color:white">Bug # @bug.Id   <br />  Priority: @bug.Priority.Name</h5>
+                                                </div>
+                                                <div class="modal-body" style="background-color:#D0E1F9">
+                                                    <div class="row">
+                                                        <div class="col-md-12  ">
+                                                            <div class="control-label">Summary</div>
+                                                            <div class="form-control" style="max-width: 100% " placeholder="What? Where? When?">@bug.Summary</div>
+                                                        </div>
+
+
+
+
+                                                        @if (@bug.Description != null)
+                                                        {
+                                                            <div class="col-md-6 row-padding">
+                                                                <div class="control-label">Description</div>
+                                                                <div class="form-control" style="max-width: 100%; height: 100% ">@bug.Description</div>
+                                                            </div>
+                                                        }
+
+                                                        @if (@bug.StepToReproduce != null)
+                                                        {
+                                                            <div class="col-md-6 row-padding">
+                                                                <div class="control-label">Step to Reproduce</div>
+                                                                <div class="form-control" style="max-width:98%; height:100%">@bug.StepToReproduce</div>
+                                                            </div>
+                                                        }
+
+
+                                                        @if (@bug.ActualResult != null)
+                                                        {
+                                                            <div class="col-md-6 row-padding">
+                                                                <div class="control-label">Actual Result</div>
+                                                                <div class="form-control" style="max-width:100%; height:100%">@bug.ActualResult</div>
+                                                            </div>
+                                                        }
+
+                                                        @if (@bug.ExpectedResult != null)
+                                                        {
+                                                            <div class="col-md-6 row-padding">
+                                                                <div class="control-label">Expected Result</div>
+                                                                <div class="form-control" style="max-width:98%; height:100%">@bug.ExpectedResult</div>
+                                                            </div>
+                                                        }
+
+                                                        @if (@bug.Comment != null)
+                                                        {
+                                                            <div class="col-md-9 row-padding ">
+                                                                <div class="control-label">Comment</div>
+                                                                <div class="form-control" style="max-width:100%; height:100%">@bug.Comment</div>
+                                                            </div>
+                                                        }
+
+                                                        @if (@bug.Link != null)
+                                                        {
+                                                            <div class="col-md-3 row-padding">
+                                                                <div class="control-label">Link</div>
+                                                                <a href="@item.Link" class="form-control cut-text" style="max-width:96%; ">@item.Link</a>
+                                                            </div>
+                                                        }
+
+
+
+
+                                                        <div class="col-md-12 row-padding text-center">
+                                                            <img class="img-button" src="@item.BugImg" style=" width:200px; height:auto;  cursor:pointer;">
+                                                        </div>
+
+                                                    </div>
+
+
+
+
+
+
+                                                </div>
+                                            }
+
+                                            <div class="modal-footer" style="background-color:#283655">
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="col-md-3 card-elem-padding-photo"  data-toggle="tooltip" title="Assigned to @item.User.Name">
+                                @if (@item.User.ProfileImg != null)
+                                {
+                                    <img class=" img-circle " src="@item.User.ProfileImg" style=" width:30px; height:auto; float:left; display: inline-block;  cursor:pointer;">
+                                }
+                                else
+                                {
+                                    <div class="user-info-avatar avatar" name="@item.User.Name" style=" cursor:pointer;"></div>
+                                }
+
+                            </div>
+                        </div>
+
+
+
+
+
+
+                        
+
+
+                    </div>
+
+
+                }
+            }
+
+        </div>
+    </div>
+}
+<div class="modal fade  " id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog " style="width:80%;" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background:#283655">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+            <div class="modal-body">
+                <img class="modal-content-img" id="img01">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<div id="myModal" class="modal-img ">
+
+
+
+    </div>*@
+
+
+
+
+
+@section scripts {
+    <script src="~/Scripts/app/JavaScript.js"></script>
+    <script src="~/Scripts/app/ImageModal.js">
+    </script>
+    <script>
+        $(function () {
+            $(".column").sortable({
+                connectWith: ".column",
+                handle: ".portlet-header",
+                cancel: ".portlet-toggle",
+                placeholder: "portlet-placeholder ui-corner-all",
+                receive: onTicketChange
+
+            });
+
+            $(".portlet")
+                .addClass("ui-widget ui-widget-content ui-helper-clearfix ui-corner-all")
+                .find(".portlet-header")
+                .addClass("ui-widget-header ui-corner-all");
+        });
+
+        function onTicketChange(event, ui) {
+            let columnId = $(event.target).closest('.column').data('id');
+            let bugId = ui.item.data("id");
+            $.ajax({
+                url: '/Bug/Edit',
+                type: 'POST',
+                data: { id: bugId, statusId: columnId }
+            })
+        }
+
+    </script>
+
+
+    <script>
+        var stringToColor = function stringToColor(str) {
+            var hash = 0;
+            var color = '#';
+            var i;
+            var value;
+            var strLength;
+
+            if (!str) {
+                return color + '333333';
+            }
+
+            strLength = str.length;
+
+            for (i = 0; i < strLength; i++) {
+                hash = str.charCodeAt(i) + ((hash << 5) - hash);
+            }
+
+            for (i = 0; i < 3; i++) {
+                value = (hash >> (i * 8)) & 0xFF;
+                color += ('00' + value.toString(16)).substr(-2);
+            }
+
+            return color;
+        };
+        
+
+      
+        var elementAvatar = document.getElementsByClassName('avatar');  
+
+        for (var i = 0; i < elementAvatar.length; i++) {
+            var name = elementAvatar[i].getAttribute("name");
+            var letter = name.substr(0, 1);
+            var backgroundColor = stringToColor(name);
+            elementAvatar[i].innerHTML = letter;
+            elementAvatar[i].style.backgroundColor = backgroundColor;
+        }
+    </script>
+
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+
+
+}
+
+
+
+
+
+
+

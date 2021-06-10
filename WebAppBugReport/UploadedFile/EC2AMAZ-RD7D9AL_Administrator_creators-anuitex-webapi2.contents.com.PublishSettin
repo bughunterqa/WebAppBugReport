@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<publishData>
+  <publishProfile
+    publishUrl="https://EC2AMAZ-RD7D9AL:8172/msdeploy.axd"
+    msdeploySite="creators-anuitex-webapi2.contents.com"
+    destinationAppUrl="https://creators-anuitex-webapi2.contents.com:443/"
+    mySQLDBConnectionString=""
+    SQLServerDBConnectionString=""
+    profileName="Default Settings"
+    publishMethod="MSDeploy"
+    userName="EC2AMAZ-RD7D9AL\Administrator" />
+</publishData>

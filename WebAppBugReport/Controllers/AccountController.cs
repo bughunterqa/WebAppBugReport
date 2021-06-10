@@ -51,7 +51,7 @@ namespace WebAppBugReport.Controllers
                     if (user != null)
                     {
                         FormsAuthentication.SetAuthCookie(model.Email, true);
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Projects");
                     }
                 }
                 else
@@ -96,6 +96,59 @@ namespace WebAppBugReport.Controllers
         {
             FormsAuthentication.SignOut();
             return RedirectToAction("Login", "Account");
+        }
+
+
+        public ActionResult UserProfile()
+        {
+            User user = db.Users.Where(p => p.Email == User.Identity.Name)
+                .Include(p=>p.Role)
+                .FirstOrDefault();
+
+            ViewBag.UserId = user.Id;
+
+            if(user.ProfileImg != null)
+            {
+                ViewBag.Photo = user.ProfileImg;
+            }
+
+            
+
+            return View(user);
+        }
+
+
+        [HttpPost]
+        public ActionResult EditUserProfile(User user)
+        {
+            if(user.UploadPhoto != null)
+            {
+                string strDateTime = DateTime.Now.ToString("ddMMyyyyHHMMss");
+                string finalPath = "\\UploadedFile\\" + strDateTime + user.UploadPhoto.FileName;
+
+                user.UploadPhoto.SaveAs(Server.MapPath("~") + finalPath);
+                user.ProfileImg = finalPath;
+            }
+            
+
+            
+
+            user.Password = "Test123!";
+            user.RoleId = 1;
+
+
+
+            if (ModelState.IsValid)
+            {
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("UserProfile");
+            }
+
+            
+
+
+            return RedirectToAction("UserProfile", "Account");
         }
 
 

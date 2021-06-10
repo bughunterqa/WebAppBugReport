@@ -1,15 +1,169 @@
-﻿@model WebAppBugReport.Data.Models.Project
+﻿@using WebAppBugReport.Data.Models
+@model  Project
 
-<div class="modal-content">
-    <div class="modal-header">
-        <button class="close" data-dismiss="modal" area-hidden="true">X</button>
-        <h4>Модель компьютера</h4>
-    </div>
-    <div class="modal-body">
-        <dl class="dl-horizontal">
-            <dt>Название модели:</dt>
-            <dd>@Html.DisplayFor(model => model.ProjectName)</dd>
+@{
+    ViewBag.Title = "Details";
+}
 
-        </dl>
+<h2 class="row-padding" style="padding-bottom:25px">
+    @ViewBag.Name
+    <a  data-toggle="modal" data-target="#editProjectNameModal" data-whatever="@ViewBag.Name "><i class="bi bi-pencil" style="font-size:20px; cursor:pointer"></i></a>
+</h2>
+<div class="modal fade" id="editProjectNameModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Project Name</h5>
+            </div>
+            <form method="post" action="/Projects/Edit/">
+                <div class="modal-body">  
+                    <input type="text" name="projectName" class="form-control" style="min-width:100%" />
+                </div>
+                <div class="modal-footer">
+                    @Html.Hidden("projectId", @ViewBag.ProjectId as string)
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Change</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+
+
+<div class="row">
+    <div class="col-md-10">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddUserToProject">Add Member</button>
+    </div>
+    <div class="col-md-2">
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+
+</div>
+
+<div style="padding-bottom:20px">
+    
+    
+</div>
+
+
+
+
+
+
+<table class="table ">
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Email
+        </th>
+        <th>
+            Role
+        </th>
+        <th>
+            Delete
+        </th>
+    </tr>
+
+    @foreach (User user in ViewBag.Users)
+    {
+        <tr>
+            @if (user.Projects.Contains(ViewBag.Project))
+            {
+                <td>
+                    @Html.Hidden("id", user.Id)
+                    @user.Name
+                </td>
+                <td>
+                    @user.Email
+                </td>
+                <td>
+                    @user.Role.Name
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteUserFromProjectModal" data-whatever="@user.Id"><i class="bi bi-person-x"></i></button>
+                </td>
+
+            }
+        </tr>
+    }
+</table>
+
+<div class="modal fade" id="deleteUserFromProjectModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Project Name</h5>
+            </div>
+            <form method="post" action="/Projects/DeleteUserFromProject">
+                <div class="modal-body">
+                    Do you confirm that you want to exclude the user from the project?
+                    <input type="hidden" name="Id" class="form-control" />
+                </div>
+                <div class="modal-footer">
+                    @Html.Hidden("projectId", @ViewBag.ProjectId as string)
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div class="modal fade" id="AddUserToProject" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Member</h5>
+            </div>
+            <form method="post" action="/Projects/AddUserToProject">
+                <div class="modal-body">
+                    Email
+                    @Html.Hidden("projectId", @ViewBag.ProjectId as string)
+                    <input type="text" name="Email" class="form-control" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>         
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section scripts{
+
+    <script>
+        $('#editProjectNameModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var recipient = button.data('whatever')
+            var modal = $(this)
+            modal.find('.modal-body input').val(recipient)
+        })
+    </script>
+
+
+    <script>
+        $('#deleteUserFromProjectModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var recipient = button.data('whatever')
+            var modal = $(this)
+            modal.find('.modal-body input').val(recipient)
+        })
+    </script>
+
+
+
+
+}

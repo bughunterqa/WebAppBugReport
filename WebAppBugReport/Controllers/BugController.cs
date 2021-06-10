@@ -84,7 +84,7 @@ namespace WebAppBugReport.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "tester")]
+        [Authorize(Roles = "QA Engineer")]
         public ActionResult Create(Bug bug)
         {
             ViewBag.PriorityId = new SelectList(db.Priorities, "Id", "Name");
@@ -104,40 +104,54 @@ namespace WebAppBugReport.Controllers
 
             db.Bugs.Add(bug);
             db.SaveChanges();
-            return RedirectToAction("Index", new { id = bug.ProjectId });
+            return RedirectToAction("ListBugs", new { id = bug.ProjectId });
         }
 
         [HttpGet]
         public ActionResult Details(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
-            }
             Bug bug = db.Bugs.Find(id);
-            if (bug == null)
-            {
-                return HttpNotFound();
-            }
-
-
-            ViewBag.PriorityId = new SelectList(db.Priorities, "Id", "Name");
-            ViewBag.ResultId = new SelectList(db.Results, "Id", "Name");
-            ViewBag.StatusId = new SelectList(db.Statuses, "Id", "Name");
-            ViewBag.UserId = new SelectList(db.Users, "Id", "Name");
 
 
             return View(bug);
         }
 
-        public ActionResult TestCard()
+
+
+        public ActionResult _BugDetailsModal(int id)
+        {
+            ViewBag.BugId = id;
+            return PartialView();
+        }
+
+
+
+
+        public ActionResult ListBugs(int id)
         {
 
-            IEnumerable<Bug> bug = db.Bugs
-                .Include(p=>p.Status)
+            List<Status> statuses = db.Statuses.ToList();
+
+
+
+
+            List<Bug> bug = db.Bugs
+                .Include(p => p.Status)
+                .Include(p => p.Priority)
+                .Include(p=>p.User)
+                .Where(p=>p.ProjectId == id)
+                .OrderByDescending(x => x.Updated)
                 .ToList();
 
-            return View(bug);
+            ViewBag.ProjectId = id;
+
+            BugList bugList = new BugList
+            {
+                Statuses = statuses,
+                Bugs = bug
+            };
+
+            return View(bugList);
         }
 
 
@@ -147,16 +161,17 @@ namespace WebAppBugReport.Controllers
             Bug bug = db.Bugs.Find(id);
 
             bug.StatusId = statusId;
-
-
+            bug.Updated = DateTime.Now;
 
             if (ModelState.IsValid)
             {
                 db.Entry(bug).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("TestCard");
             }
-            return View(bug);
+
+            return RedirectToAction("TestCard");
+
         }
 
 

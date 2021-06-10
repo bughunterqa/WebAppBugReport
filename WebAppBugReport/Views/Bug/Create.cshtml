@@ -7,7 +7,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Creating bug</h2>
+<h2 style="padding-top:10px">Creating a bug report</h2>
 
 @using (Html.BeginForm("Create", "Bug", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
@@ -84,7 +84,7 @@
         </div>
 
         <div class="col-md-3 btn btn-link " >
-            @Html.ActionLink("Back to List", "Index")
+            @Html.ActionLink("Back to List", "ListBugs", new { id = ViewBag.ProjectId })
         </div>
 
 

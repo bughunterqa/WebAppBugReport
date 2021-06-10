@@ -1,124 +1,20 @@
-﻿@model WebAppBugReport.Data.Models.Bug
+﻿@model WebAppBugReport.Data.Models.BugList
 
 <div>
     <h4>Bug</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Priority.Name)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Priority.Name)
-        </dd>
+        @foreach (var item in Model.Bugs)
+        {
+            <dt>
+                @item.Summary
+            </dt>
+        }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Project.ProjectName)
-        </dt>
 
-        <dd>
-            @ViewBag.PriorityId
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Result.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Result.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Status.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Status.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.User.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.User.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Summary)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Summary)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ExpectedResult)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ExpectedResult)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ActualResult)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ActualResult)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.StepToReproduce)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.StepToReproduce)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.BugImg)
-        </dt>
-
-        <dd>
-            <img src="@Html.DisplayFor(model => model.BugImg)" />
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Comment)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Comment)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Link)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Link)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Date)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Date)
-        </dd>
 
     </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
