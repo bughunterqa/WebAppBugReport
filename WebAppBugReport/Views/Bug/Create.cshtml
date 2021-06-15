@@ -37,12 +37,6 @@
         </div>
 
 
-
-
-        <div class="col-md-5 row-padding">
-            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label " })
-            @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @style = "max-width: 100%" })
-        </div>
         <div class="col-md-7 row-padding">
             @Html.LabelFor(model => model.ActualResult, htmlAttributes: new { @class = "control-label " })
             @Html.TextAreaFor(m => m.ActualResult, new { @class = "form-control", @style = "max-width: 100%" })
@@ -62,8 +56,6 @@
 
 
         <div class="col-md-8 row-padding">
-            @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label" })
-            @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 100%" } })
             @Html.Hidden("ProjectId")
         </div>
         <div class="col-md-4 row-padding">

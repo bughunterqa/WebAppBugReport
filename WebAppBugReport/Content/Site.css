@@ -5,8 +5,8 @@
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
-    /*padding-left: 85px;
-    padding-right: 15px;*/
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -24,3 +24,16 @@ textarea {
 }
 
 
+.con-body-cards {
+    margin-right: 0px
+}
+
+
+.container {
+    margin-right:0px
+}
+
+.navbar-nav na > li > a {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}

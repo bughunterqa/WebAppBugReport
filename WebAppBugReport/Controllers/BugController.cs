@@ -16,7 +16,7 @@ namespace WebAppBugReport.Controllers
     {
         AppDbContext db = new AppDbContext();
 
-        public ActionResult Index(int id, int? bugStatus, int? assignedDev, int page = 1)
+/*        public ActionResult Index(int id, int? bugStatus, int? assignedDev, int page = 1)
         {
             ViewBag.ProjectId = id;
             int pageSize = 3;
@@ -65,18 +65,17 @@ namespace WebAppBugReport.Controllers
             ViewBag.UserName = User.Identity.Name;
 
             return View(ivm);
-        }
+        }*/
 
-        public ActionResult GetPagination()
+/*        public ActionResult GetPagination()
         {
             return PartialView();
-        }
+        }*/
 
         [HttpGet]
         public ActionResult Create(int? id)
         {
             ViewBag.PriorityId = new SelectList(db.Priorities, "Id", "Name");
-            ViewBag.ResultId = new SelectList(db.Results, "Id", "Name");
             ViewBag.StatusId = new SelectList(db.Statuses, "Id", "Name");
             ViewBag.UserId = new SelectList(db.Users, "Id", "Name");
             ViewBag.ProjectId = id;
@@ -88,7 +87,6 @@ namespace WebAppBugReport.Controllers
         public ActionResult Create(Bug bug)
         {
             ViewBag.PriorityId = new SelectList(db.Priorities, "Id", "Name");
-            ViewBag.ResultId = new SelectList(db.Results, "Id", "Name");
             ViewBag.StatusId = new SelectList(db.Statuses, "Id", "Name");
             ViewBag.UserId = new SelectList(db.Users, "Id", "Name");
             bug.Date = DateTime.Now;
@@ -100,38 +98,23 @@ namespace WebAppBugReport.Controllers
             bug.BugImg = finalPath;
 
 
-
-
             db.Bugs.Add(bug);
             db.SaveChanges();
             return RedirectToAction("ListBugs", new { id = bug.ProjectId });
         }
 
-        [HttpGet]
-        public ActionResult Details(int? id)
-        {
-            Bug bug = db.Bugs.Find(id);
 
 
-            return View(bug);
-        }
-
-
-
-        public ActionResult _BugDetailsModal(int id)
-        {
-            ViewBag.BugId = id;
-            return PartialView();
-        }
 
 
 
 
         public ActionResult ListBugs(int id)
         {
-
             List<Status> statuses = db.Statuses.ToList();
 
+            ViewBag.Users = db.Users.ToList();
+            ViewBag.Priority = db.Priorities.ToList();
 
 
 
@@ -169,8 +152,38 @@ namespace WebAppBugReport.Controllers
                 db.SaveChanges();
                 return RedirectToAction("TestCard");
             }
-
             return RedirectToAction("TestCard");
+        }
+
+
+        [HttpPost]
+        public ActionResult ChangeBug(Bug bug)
+        {          
+            bug.Updated = DateTime.Now;
+            string strDateTime = DateTime.Now.ToString("ddMMyyyyHHMMss");
+            string finalPath;
+
+            if(bug.UploadFile != null)
+            {
+                finalPath = "\\UploadedFile\\" + strDateTime + bug.UploadFile.FileName;
+                bug.UploadFile.SaveAs(Server.MapPath("~") + finalPath);
+                bug.BugImg = finalPath;
+            }
+
+
+
+
+
+                  
+
+            if (ModelState.IsValid)
+            {
+                db.Entry(bug).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("ListBugs", new { id = bug.ProjectId });
+            }
+
+            return View(bug);
 
         }
 

@@ -16,7 +16,7 @@ namespace WebAppBugReport.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Bug> Bugs { get; set; }
         public DbSet<Priority> Priorities { get; set; }
-        public DbSet<Result> Results { get; set; }
+
         public DbSet<Status> Statuses { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Project> Projects { get; set; }
@@ -37,8 +37,7 @@ namespace WebAppBugReport.Data
             db.Priorities.Add(new Priority { Name = "Medium" });
             db.Priorities.Add(new Priority { Name = "Hight" });
 
-            db.Results.Add(new Result { Name = "Verified" });
-            db.Results.Add(new Result { Name = "Unverified" });
+
 
             db.Statuses.Add(new Status { Name = "Open" });
             db.Statuses.Add(new Status { Name = "Queue" });

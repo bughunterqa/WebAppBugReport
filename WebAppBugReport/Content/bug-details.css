@@ -1,0 +1,46 @@
+﻿.input-max-width{
+    max-width:100%;
+}
+
+.top-padd-input > div{
+    padding-top:15px
+}
+
+.label-style > div > label{
+    color:midnightblue;
+    font-weight:bold
+}
+
+.form-control input-max-width{
+    min-height:300px
+}
+
+.modal-bug-header {
+    background-color: #262F34;
+    color: white;
+    padding: 0
+}
+.padding-header-bug {
+    padding: 15px 0 0 15px
+}
+
+
+.modal-bug-header > row > div > h1 {
+    padding: 0
+}
+
+.modal-footer {
+    background: #262F34;
+}
+
+
+.modal-body {
+    background-color: #F1D3BC;
+}
+
+.area-step {
+    height: 300px
+}
+.area-results{
+
+}

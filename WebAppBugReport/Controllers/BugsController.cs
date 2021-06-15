@@ -53,7 +53,6 @@ namespace WebAppBugReport.Controllers
         {
             ViewBag.PriorityId = new SelectList(db.Priorities, "Id", "Name");
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "ProjectName");
-            ViewBag.ResultId = new SelectList(db.Results, "Id", "Name");
             ViewBag.StatusId = new SelectList(db.Statuses, "Id", "Name");
             ViewBag.UserId = new SelectList(db.Users, "Id", "Name");
             return View();
@@ -75,7 +74,6 @@ namespace WebAppBugReport.Controllers
 
             ViewBag.PriorityId = new SelectList(db.Priorities, "Id", "Name", bug.PriorityId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "ProjectName", bug.ProjectId);
-            ViewBag.ResultId = new SelectList(db.Results, "Id", "Name", bug.ResultId);
             ViewBag.StatusId = new SelectList(db.Statuses, "Id", "Name", bug.StatusId);
             ViewBag.UserId = new SelectList(db.Users, "Id", "Name", bug.UserId);
             return View(bug);
@@ -95,7 +93,6 @@ namespace WebAppBugReport.Controllers
             }
             ViewBag.PriorityId = new SelectList(db.Priorities, "Id", "Name", bug.PriorityId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "ProjectName", bug.ProjectId);
-            ViewBag.ResultId = new SelectList(db.Results, "Id", "Name", bug.ResultId);
             ViewBag.StatusId = new SelectList(db.Statuses, "Id", "Name", bug.StatusId);
             ViewBag.UserId = new SelectList(db.Users, "Id", "Name", bug.UserId);
             return View(bug);
@@ -116,7 +113,6 @@ namespace WebAppBugReport.Controllers
             }
             ViewBag.PriorityId = new SelectList(db.Priorities, "Id", "Name", bug.PriorityId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "ProjectName", bug.ProjectId);
-            ViewBag.ResultId = new SelectList(db.Results, "Id", "Name", bug.ResultId);
             ViewBag.StatusId = new SelectList(db.Statuses, "Id", "Name", bug.StatusId);
             ViewBag.UserId = new SelectList(db.Users, "Id", "Name", bug.UserId);
             return View(bug);

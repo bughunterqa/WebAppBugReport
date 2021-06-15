@@ -1,4 +1,6 @@
 ﻿@model WebAppBugReport.Data.Models.BugList
+<link href="@Url.Content("~/Content/bug-details.css")" rel="stylesheet" type="text/css" />
+
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -69,95 +71,105 @@
                             <div class=" col-md-7 card-elem-padding-details">
                                 <button type="button" class="btn btn-primary form-control open-details-modal" data-toggle="modal" style="background:#336B87;" data-whatever="@item.Id">Details  </button>
 
-                                <div class="modal fade details-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal fade details-modal" tabindex="-1" role="dialog"  aria-hidden="true">
                                     <div class="modal-dialog modal-xl" role="document" style="min-width:1300px; min-height:2600px">
                                         <div class="modal-content">
                                             @foreach (var bug in Model.Bugs.Where(p => p.Id == @item.Id))
                                             {
-                                                <div class="modal-header text-left" style="background-color:#283655">
-                                                    <h5 class="modal-title" id="exampleModalLabel" style="color:white">Bug # @bug.Id   <br />  Priority: @bug.Priority.Name</h5>
-                                                </div>
-                                                <div class="modal-body" style="background-color:#D0E1F9">
-                                                    <div class="row">
-                                                        <div class="col-md-12  ">
-                                                            <div class="control-label">Summary</div>
-                                                            <div class="form-control" style="max-width: 100% " placeholder="What? Where? When?">@bug.Summary</div>
+                                                using (Html.BeginForm("ChangeBug", "Bug", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                                {
+                                                    <div class="modal-header  modal-bug-header " >
+                                                        <div class="row">
+                                                            <div class="col-md-4 padding-header-bug" style="padding:15px 0 0 40px">
+                                                                <h5 class="modal-title">Bug # @bug.Id   <br />  Priority: @bug.Priority.Name</h5>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <img src="~/UploadedFile/LOGO_Prodaction.png" class="d-inline-block " style="width:300px; padding-left:10px ">
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <h5 >@bug.Date</h5>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        
+                                                    </div>
+                                                    <div class="modal-body" style="        background-color: white">
+                                                        <div class="row top-padd-input label-style">
+                                                            <input class="form-control input-max-width" type="hidden" name="StatusId" value="@bug.StatusId" />
+                                                            <input class="form-control input-max-width" type="hidden" name="ProjectId" value="@bug.ProjectId" />
+                                                            <input class="form-control input-max-width" type="hidden" name="Date" value="@bug.Date" />
+                                                            <input class="form-control input-max-width" type="hidden" name="Id" value="@bug.Id" />
+
+                                                            <div class="col-md-12  ">
+                                                                <label class="control-label">Summary*</label>
+                                                                <input class="form-control input-max-width" type="text" name="Summary" value="@bug.Summary" />
+                                                            </div>
+
+                                                            <div class="col-md-3  ">
+                                                                <label class="control-label">Step to Reproduce</label>
+                                                                @Html.TextArea("StepToReproduce", @bug.StepToReproduce, 13, 60, new { @class = "form-control" })
+
+                                                            </div>
+                                                            <div class="col-md-6  ">
+                                                                <label class="control-label">Expected Result</label>
+                                                                @Html.TextArea("ExpectedResult", @bug.ExpectedResult, 5, 60, new { @class = "form-control", @style = "max-width:100%" })
+                                                            </div>
+
+                                                            <div class="col-md-3 ">
+                                                                <label class="control-label">Assigned to</label>
+                                                                @Html.DropDownList("UserId", new SelectList(ViewBag.Users, "Id", "Name", bug.UserId), new { @class = "form-control" })
+                                                            </div>
+
+                                                            <div class="col-md-3 ">
+                                                                <label class="control-label">Priority</label>
+                                                                @Html.DropDownList("PriorityId", new SelectList(ViewBag.Priority, "Id", "Name", bug.PriorityId), new { @class = "form-control" })
+                                                            </div>
+
+
+                                                            <div class="col-md-6  ">
+                                                                <label class="control-label">Actual Result</label>
+                                                                @Html.TextArea("ActualResult", @bug.ActualResult, 5, 60, new { @class = "form-control", @style = "max-width:100%" })
+                                                            </div>
+
+                                                            <div class="col-md-3 ">
+                                                                <label class="control-label">Image</label>
+                                                                <img class="form-control img-button" src="@bug.BugImg" style="width:auto; min-height:160px; max-height:160px;  cursor:pointer;" />
+                                                                <input type="file" name="UploadFile" class="form-control " />
+                                                                <input type="hidden" name="BugImg" value="@bug.BugImg" />
+                                                            </div>
+
+
+                                                            <div class="col-md-5 ">
+                                                                <label class="control-label">Link</label>
+                                                                <input class="form-control input-max-width" type="text" name="Link" value="@bug.Link" />
+                                                            </div>
+
+
                                                         </div>
 
 
-
-
-                                                        @if (@bug.Description != null)
-                                                        {
-                                                            <div class="col-md-6 row-padding">
-                                                                <div class="control-label">Description</div>
-                                                                <div class="form-control" style="max-width: 100%; height: 100% ">@bug.Description</div>
-                                                            </div>
-                                                        }
-
-                                                        @if (@bug.StepToReproduce != null)
-                                                        {
-                                                            <div class="col-md-6 row-padding">
-                                                                <div class="control-label">Step to Reproduce</div>
-                                                                <div class="form-control" style="max-width:98%; height:100%">@bug.StepToReproduce</div>
-                                                            </div>
-                                                        }
-
-
-                                                        @if (@bug.ActualResult != null)
-                                                        {
-                                                            <div class="col-md-6 row-padding">
-                                                                <div class="control-label">Actual Result</div>
-                                                                <div class="form-control" style="max-width:100%; height:100%">@bug.ActualResult</div>
-                                                            </div>
-                                                        }
-
-                                                        @if (@bug.ExpectedResult != null)
-                                                        {
-                                                            <div class="col-md-6 row-padding">
-                                                                <div class="control-label">Expected Result</div>
-                                                                <div class="form-control" style="max-width:98%; height:100%">@bug.ExpectedResult</div>
-                                                            </div>
-                                                        }
-
-                                                        @if (@bug.Comment != null)
-                                                        {
-                                                            <div class="col-md-9 row-padding ">
-                                                                <div class="control-label">Comment</div>
-                                                                <div class="form-control" style="max-width:100%; height:100%">@bug.Comment</div>
-                                                            </div>
-                                                        }
-
-                                                        @if (@bug.Link != null)
-                                                        {
-                                                            <div class="col-md-3 row-padding">
-                                                                <div class="control-label">Link</div>
-                                                                <a href="@item.Link" class="form-control cut-text" style="max-width:96%; ">@item.Link</a>
-                                                            </div>
-                                                        }
-
-
-
-
-                                                        <div class="col-md-12 row-padding text-center">
-                                                            <img class="img-button" src="@item.BugImg" style=" width:200px; height:auto;  cursor:pointer;">
-                                                        </div>
 
                                                     </div>
+                                                    <div class="modal-footer" >
+                                                        <div class="row">
+                                                            <div class="col-md-1">
+                                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+                                                            </div>
+                                                            <div class="col-md-offset-9 col-md-1">
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                            </div>
+                                                            <div class=" col-md-1">
+                                                                <button type="submit" class="btn btn-primary" >Change</button>
+                                                            </div>
+                                                        </div>
+                                                        
 
+                                                    </div>
+                                                }
 
-
-
-
-
-                                                </div>
                                             }
 
-                                            <div class="modal-footer" style="background-color:#283655">
-                                                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-
                                             </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -168,7 +180,7 @@
                             <div class="col-md-3 card-elem-padding-photo"  data-toggle="tooltip" title="Assigned to @item.User.Name">
                                 @if (@item.User.ProfileImg != null)
                                 {
-                                    <img class=" img-circle " src="@item.User.ProfileImg" style=" width:30px; height:auto; float:left; display: inline-block;  cursor:pointer;">
+                                    <img class=" img-circle " src="@item.User.ProfileImg" style=" width:30px; height:auto; float:left; display: inline-block;  cursor:pointer; image-rendering: optimizeSpeed;">
                                 }
                                 else
                                 {
@@ -177,13 +189,6 @@
 
                             </div>
                         </div>
-
-
-
-
-
-
-                        
 
 
                     </div>
@@ -195,6 +200,10 @@
         </div>
     </div>
 }
+
+
+
+
 <div class="modal fade  " id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog " style="width:80%;" role="document">
         <div class="modal-content">
@@ -209,11 +218,6 @@
     </div>
 </div>
 
-@*<div id="myModal" class="modal-img ">
-
-
-
-    </div>*@
 
 
 
@@ -296,6 +300,17 @@
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
+    </script>
+
+
+    <script>
+        var textarea = document.querySelector('textarea');
+
+        textarea.addEventListener('keyup', function () {
+            if (this.scrollTop > 0) {
+                this.style.height = this.scrollHeight + "px";
+            }
+        });
     </script>
 
 

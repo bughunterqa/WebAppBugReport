@@ -1,244 +1,189 @@
-﻿@model WebAppBugReport.Data.Models.BugList
-
-@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-
-
-
-
-
-
-
-@foreach (var status in Model.Statuses)
-{
-    <div class="column-header-test ">
-        
-        
-        <div class="card column back-column " data-id="@status.Id">
-            <div style="padding-bottom:20px; font-size:16px">@status.Name</div>
-            
-
-            @foreach (var item in Model.Bugs)
-            {
-                if (item.StatusId == @status.Id)
-                {
-
-                    <div class="portlet card-body text-left  " data-id="@item.Id">
-                        <div class="portlet-header ard-title ">
-                            <div>
-                                ID# @item.Id
-                                @if (item.Priority.Name == "Low")
-                                {
-                                    <i class="bi bi-bug " style="cursor:pointer; float:right; color:green " data-toggle="tooltip" data-placement="left" title="Priority: @item.Priority.Name"></i>
-                                }
-                                else if (item.Priority.Name == "Medium")
-                                {
-                                    <i class="bi bi-bug " style="cursor:pointer; float:right; color:orange " data-toggle="tooltip" data-placement="left" title="Priority: @item.Priority.Name"></i>
-                                }
-                                else
-                                {
-                                    <i class="bi bi-bug " style="cursor:pointer; float:right; color:red " data-toggle="tooltip" data-placement="left" title="Priority: @item.Priority.Name"></i>
-                                }
-
-
-                            </div>
-
-
-                        </div>
-                        @*<img src="@item.BugImg" class="card-img-top" alt="..." style="width:145px">*@
-                        <div class="portlet-content  card-text">@item.Summary</div>
-
-
-                        <button type="button" class="btn btn-primary form-control open-details-modal" data-toggle="modal" style="background:#336B87" data-whatever="@item.Id">Details  </button>
-
-
-
-
-                        <div class="modal fade details-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-xl" role="document" style="min-width:1300px; min-height:2600px">
-                                <div class="modal-content">
-                                    @foreach (var bug in Model.Bugs.Where(p => p.Id == @item.Id))
-                                    {
-                                        <div class="modal-header text-left" style="background-color:#283655">
-                                            <h5 class="modal-title" id="exampleModalLabel" style="color:white">Bug # @bug.Id   <br />  Priority: @bug.Priority.Name</h5>
-                                            @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>*@
-                                        </div>
-                                        <div class="modal-body" style="background-color:#D0E1F9">
-                                            <div class="row">
-                                                <div class="col-md-12  ">
-                                                    <div class="control-label">Summary</div>
-                                                    <div class="form-control" style="max-width: 100% " placeholder="What? Where? When?">@bug.Summary</div>
-                                                </div>
-
-
-                                                @if (@bug.Description != null)
-                                                {
-                                                    <div class="col-md-6 row-padding">
-                                                        <div class="control-label">Description</div>
-                                                        <div class="form-control" style="max-width: 100%; height: 100% ">@bug.Description</div>
-                                                    </div>
-                                                }
-
-                                                @if (@bug.StepToReproduce != null)
-                                                {
-                                                    <div class="col-md-6 row-padding">
-                                                        <div class="control-label">Step to Reproduce</div>
-                                                        <div class="form-control" style="max-width:98%; height:100%">@bug.StepToReproduce</div>
-                                                    </div>
-                                                }
-
-
-                                                @if (@bug.ActualResult != null)
-                                                {
-                                                    <div class="col-md-6 row-padding">
-                                                        <div class="control-label">Actual Result</div>
-                                                        <div class="form-control" style="max-width:100%; height:100%">@bug.ActualResult</div>
-                                                    </div>
-                                                }
-
-                                                @if (@bug.ExpectedResult != null)
-                                                {
-                                                    <div class="col-md-6 row-padding">
-                                                        <div class="control-label">Expected Result</div>
-                                                        <div class="form-control" style="max-width:98%; height:100%">@bug.ExpectedResult</div>
-                                                    </div>
-                                                }
-
-                                                @if (@bug.Comment != null)
-                                                {
-                                                    <div class="col-md-9 row-padding ">
-                                                        <div class="control-label">Comment</div>
-                                                        <div class="form-control" style="max-width:100%; height:100%">@bug.Comment</div>
-                                                    </div>
-                                                }
-
-                                                @if (@bug.Link != null)
-                                                {
-                                                    <div class="col-md-3 row-padding">
-                                                        <div class="control-label">Link</div>
-                                                        <a href="@item.Link" class="form-control cut-text" style="max-width:96%; ">@item.Link</a>
-                                                    </div>
-                                                }
-
-
-
-
-                                                <div class="col-md-12 row-padding text-center ">
-                                                    <img id="myImg" src="@item.BugImg" alt="@item.Summary" style="width:100%;max-width:300px">
-
-                                                </div>
-
-                                            </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-@*
-                                            <dl class="dl-horizontal text-left">
-
-                                                
-
-                                              
-
-                                                <dt>Comment</dt>
-                                                <dd>@bug.Comment</dd>
-
-                                                <dt>Link</dt>
-                                                <dd>@bug.Link</dd>
-
-                                            </dl>
-
-*@
-
-                                            @*<img id="myImg" src="@item.BugImg" alt="@item.Summary" style="width:100%;max-width:300px">*@
-
-
-                                            <div id="myModal" class="modal-img ">
-                                                <span class="close-img">×</span>
-                                                <img class="modal-content-img" id="img01">
-                                                <div id="caption"></div>
-                                            </div>
-
-
-
-                                        </div>
-                                    }
-
-                                    <div class="modal-footer" style="background-color:#283655">
-                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-
-
-                }
-            }
+﻿@*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />*@
+
+<style>
+    /* demo background */
+    body {
+        @*background: #23074D;
+        background: -webkit-linear-gradient(to right, #CC5333, #23074D);
+        background: linear-gradient(to right, #CC5333, #23074D);*@
+        @*background: url(/UploadedFile/software-testing-principle-04.jpg);*@
+        background: url(/UploadedFile/iron_texture1742.jpg);
+        background-size: 20%;
+    }
+
+    /* demo snippet */
+    .hoversnippet {
+        padding-top:0px;
+        background-color: #fff;
+        color: #ffffff;
+        display: inline-block;
+        font-size: 16px;
+        overflow: hidden;
+        position: relative;
+        text-align: left;
+        width: auto;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+    }
+
+    .hoversnippet *,
+    .hoversnippet *:before,
+    .hoversnippet *:after {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        -webkit-transition: all 0.45s ease;
+        transition: all 0.45s ease;
+    }
+
+    .hoversnippet img {
+        backface-visibility: hidden;
+        vertical-align:auto;
+    }
+
+    .hoversnippet:before,
+    .hoversnippet:after {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        content: '';
+        background-color: #b81212;
+        opacity: 0.5;
+        -webkit-transition: all 0.45s ease;
+        transition: all 0.45s ease;
+    }
+
+    .hoversnippet:before {
+        -webkit-transform: skew(30deg) translateX(-80%);
+        transform: skew(30deg) translateX(-80%);
+    }
+
+    .hoversnippet:after {
+        -webkit-transform: skew(-30deg) translateX(-70%);
+        transform: skew(-30deg) translateX(-70%);
+    }
+
+    .hoversnippet figcaption {
+        position: absolute;
+        top: 0px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        z-index: 1;
+        bottom: 0;
+        padding: 25px 40% 25px 20px;
+    }
+
+    .hoversnippet figcaption:before,
+    .hoversnippet figcaption:after {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: @*#b81212;*@  #0a2654;
+        box-shadow: 0 0 20px rgba(0, 30, 0, 0.7);
+        content: '';
+        opacity: 0.5;
+        z-index: -1;
+    }
+
+    .hoversnippet figcaption:before {
+        -webkit-transform: skew(30deg) translateX(-100%);
+        transform: skew(30deg) translateX(-100%);
+    }
+
+    .hoversnippet figcaption:after {
+        -webkit-transform: skew(-30deg) translateX(-90%);
+        transform: skew(-30deg) translateX(-90%);
+    }
+
+    .hoversnippet h3,
+    .hoversnippet p {
+        margin: 0;
+        opacity: 0;
+        letter-spacing: 1px;
+    }
+
+    .hoversnippet h3 {
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1em;
+        text-transform: uppercase;
+        width: auto;
+    }
+
+    .hoversnippet p {
+        font-size: 0.9em;
+    }
+
+    .hoversnippet a {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1;
+    }
+
+    .hoversnippet:hover h3,
+    .hoversnippet.hover h3,
+    .hoversnippet:hover p,
+    .hoversnippet.hover p {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+        opacity: 0.9;
+        -webkit-transition-delay: 0.2s;
+        transition-delay: 0.2s;
+    }
+
+    .hoversnippet:hover:before,
+    .hoversnippet.hover:before {
+        -webkit-transform: skew(30deg) translateX(-20%);
+        transform: skew(30deg) translateX(-20%);
+        -webkit-transition-delay: 0.05s;
+        transition-delay: 0.05s;
+    }
+
+    .hoversnippet:hover:after,
+    .hoversnippet.hover:after {
+        -webkit-transform: skew(-30deg) translateX(-10%);
+        transform: skew(-30deg) translateX(-10%);
+    }
+
+    .hoversnippet:hover figcaption:before,
+    .hoversnippet.hover figcaption:before {
+        -webkit-transform: skew(30deg) translateX(-40%);
+        transform: skew(30deg) translateX(-40%);
+        -webkit-transition-delay: 0.15s;
+        transition-delay: 0.15s;
+    }
+
+    .hoversnippet:hover figcaption:after,
+    .hoversnippet.hover figcaption:after {
+        -webkit-transform: skew(-30deg) translateX(-30%);
+        transform: skew(-30deg) translateX(-30%);
+        -webkit-transition-delay: 0.1s;
+        transition-delay: 0.1s;
+    }
+</style>
+
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+
+            <figure class="hoversnippet">
+                @*<img src="~/UploadedFile/InstantQA_Blogpost.jpg" class="img-responsive" alt="Red Hover Effect" />*@
+                @*<img src="~/UploadedFile/5-Qualities-Of-A-Good-QA-Engineer.jpg" class="img-responsive" alt="Red Hover Effect" />*@
+                @*<img src="~/UploadedFile/software-testing-principle-04.jpg" class="img-responsive" alt="Red Hover Effect" />*@
+
+                <figcaption>
+                    <h3>DESIGNER BOOTSTRAP</h3>
+                    <p>Huli designer ili ne huli</p>
+                </figcaption>
+                <a href="#"></a>
+            </figure>
 
         </div>
     </div>
-}
-
-
-
-
-
-@section scripts {
-    <script src="~/Scripts/app/JavaScript.js"></script>
-    <script src="~/Scripts/app/ImageModal.js">
-    </script>
-    <script>
-        $(function () {
-            $(".column").sortable({
-                connectWith: ".column",
-                handle: ".portlet-header",
-                cancel: ".portlet-toggle",
-                placeholder: "portlet-placeholder ui-corner-all",
-                receive: onTicketChange
-
-            });
-
-            $(".portlet")
-                .addClass("ui-widget ui-widget-content ui-helper-clearfix ui-corner-all")
-                .find(".portlet-header")
-                .addClass("ui-widget-header ui-corner-all");
-        });
-
-        function onTicketChange(event, ui) {
-            let columnId = $(event.target).closest('.column').data('id');
-            let bugId = ui.item.data("id");
-            $.ajax({
-                url: '/Bug/Edit',
-                type: 'POST',
-                data: { id: bugId, statusId: columnId }
-            })
-        }
-
-    </script>
-
-
-}
-
-
-
-
-
-
-

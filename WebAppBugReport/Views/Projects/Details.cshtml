@@ -7,7 +7,7 @@
 
 <h2 class="row-padding" style="padding-bottom:25px">
     @ViewBag.Name
-    <a  data-toggle="modal" data-target="#editProjectNameModal" data-whatever="@ViewBag.Name "><i class="bi bi-pencil" style="font-size:20px; cursor:pointer"></i></a>
+    <a data-toggle="modal" data-target="#editProjectNameModal" data-whatever="@ViewBag.Name "><i class="bi bi-pencil" style="font-size:20px; cursor:pointer"></i></a>
 </h2>
 <div class="modal fade" id="editProjectNameModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm" role="document">
@@ -16,7 +16,7 @@
                 <h5 class="modal-title">Project Name</h5>
             </div>
             <form method="post" action="/Projects/Edit/">
-                <div class="modal-body">  
+                <div class="modal-body">
                     <input type="text" name="projectName" class="form-control" style="min-width:100%" />
                 </div>
                 <div class="modal-footer">
@@ -41,10 +41,9 @@
 </div>
 
 <div style="padding-bottom:20px">
-    
-    
-</div>
 
+
+</div>
 
 
 
@@ -117,7 +116,7 @@
 
 
 
-<div class="modal fade" id="AddUserToProject" tabindex="-1" role="dialog"  aria-hidden="true">
+<div class="modal fade" id="AddUserToProject" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -133,7 +132,7 @@
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Add</button>
                 </div>
-            </form>         
+            </form>
         </div>
     </div>
 </div>

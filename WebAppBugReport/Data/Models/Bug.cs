@@ -14,7 +14,6 @@ namespace WebAppBugReport.Data.Models
 
         public string Summary { get; set; }
 
-        public string Description { get; set; }
 
         [Display(Name = "Expected Result")]
         public string ExpectedResult { get; set; }
@@ -30,7 +29,6 @@ namespace WebAppBugReport.Data.Models
         [NotMapped]
         public HttpPostedFileBase UploadFile { get; set; }
 
-        public string Comment { get; set; }
 
         public string Link { get; set; }
 
@@ -48,8 +46,7 @@ namespace WebAppBugReport.Data.Models
         public Status Status { get; set; }
 
 
-        public int? ResultId { get; set; }
-        public Result Result { get; set; }
+
 
 
         public int? UserId { get; set; }
@@ -67,12 +64,6 @@ namespace WebAppBugReport.Data.Models
         public string Name { get; set; }
     }
 
-    public class Result
-    {
-        public int Id { get; set; }
-        [Display(Name = "Result")]
-        public string Name { get; set; }
-    }
 
     public class Status
     {

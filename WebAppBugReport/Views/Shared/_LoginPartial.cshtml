@@ -5,19 +5,19 @@
     {
         @Html.AntiForgeryToken()
 
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-right" style="padding-right: 100px">
             <li>
-                @Html.ActionLink( User.Identity.Name , "UserProfile", "Account", new {  },new{ style = "line-height: 40px;" })
-            </li>
-            <li>@Html.ActionLink("Log Off", "Logout", "Account",new {}, new { @class = "navbar-brand", style = "line-height: 40px;" })</li>
+                @Html.ActionLink( User.Identity.Name , "UserProfile", "Account", new {  },new{ style = "line-height: 40px; " }) 
+            </li> 
+            <li>@Html.ActionLink("Log Off", "Logout", "Account",new {}, new { @class = "navbar-brand", style = "line-height: 40px; font-size:16px" })</li>
         </ul>
     }
 }
 else
 {
-    <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Register", "Register", "Account",  new { id = "registerLink" }, new { style = "line-height: 40px;" })</li>
-        <li>@Html.ActionLink("Log in", "Login", "Account",   new { id = "loginLink" }, new { style = "line-height: 40px;" })</li>
+    <ul class="nav navbar-nav navbar-right" style="padding-right: 100px">
+        <li>@Html.ActionLink("Register", "Register", "Account",  new { id = "registerLink" }, new { style = "line-height: 40px; "})</li>
+        <li>@Html.ActionLink("Log in", "Login", "Account",   new { id = "loginLink" }, new { style = "line-height: 40px; font-size:16px" })</li>
     </ul>
 }
 

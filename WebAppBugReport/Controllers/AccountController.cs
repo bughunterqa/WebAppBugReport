@@ -18,7 +18,7 @@ namespace WebAppBugReport.Controllers
         AppDbContext db = new AppDbContext();
         public ActionResult Register()
         {
-            ViewBag.RoleId = new SelectList(db.Roles, "Id", "Name");
+            ViewBag.RoleId = new SelectList(db.Roles, "Id", "Name").Take(2);
 
             return View();
         }
@@ -36,7 +36,7 @@ namespace WebAppBugReport.Controllers
                 using (AppDbContext db = new AppDbContext())
                 {
                     user = db.Users.FirstOrDefault(u => u.Email == model.Email);
-                    ViewBag.RoleId = new SelectList(db.Roles, "Id", "Name");
+                    ViewBag.RoleId = new SelectList(db.Roles, "Id", "Name").Take(2);
                 }
                 if (user == null)
                 {
@@ -119,22 +119,23 @@ namespace WebAppBugReport.Controllers
 
 
         [HttpPost]
-        public ActionResult EditUserProfile(User user)
+        public ActionResult EditUserProfile(string Name,  HttpPostedFileBase UploadPhoto)
         {
-            if(user.UploadPhoto != null)
+            User user = db.Users.Where(p => p.Email == User.Identity.Name).FirstOrDefault();
+
+            user.Name = Name;
+            
+            
+
+            if (UploadPhoto != null)
             {
                 string strDateTime = DateTime.Now.ToString("ddMMyyyyHHMMss");
-                string finalPath = "\\UploadedFile\\" + strDateTime + user.UploadPhoto.FileName;
+                string finalPath = "\\UploadedFile\\" + strDateTime + UploadPhoto.FileName;
 
-                user.UploadPhoto.SaveAs(Server.MapPath("~") + finalPath);
+                UploadPhoto.SaveAs(Server.MapPath("~") + finalPath);
+                
                 user.ProfileImg = finalPath;
             }
-            
-
-            
-
-            user.Password = "Test123!";
-            user.RoleId = 1;
 
 
 
