@@ -99,6 +99,7 @@ namespace WebAppBugReport.Controllers
         }
 
 
+        [Authorize]
         public ActionResult UserProfile()
         {
             User user = db.Users.Where(p => p.Email == User.Identity.Name)

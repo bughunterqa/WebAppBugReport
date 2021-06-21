@@ -22,6 +22,9 @@ namespace WebAppBugReport.Controllers
             User user = db.Users.Where(p => p.Email == User.Identity.Name).FirstOrDefault();
             ViewBag.Users = user;
 
+
+
+
             int pageSize = 7;
             IEnumerable<Project> projectsPerPages = db.Projects
                 .OrderBy(x => x.Id)

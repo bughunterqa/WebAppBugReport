@@ -10,10 +10,7 @@
 
 <h2 class="row-padding">
     Available Projects
-    @if (User.IsInRole("QA Engineer"))
-    {
-        <a href="/Projects/Create/" class="btn"><i class="fa fa-plus btn-lg"></i></a>
-    }
+    <a href="/Projects/Create/" class="btn"><i class="fa fa-plus btn-lg"></i></a>
 </h2>
 
 
@@ -32,7 +29,27 @@
 <div class="row">
     @foreach (Project project in Model.Projects)
     {
-        if (project.Users.Contains(ViewBag.Users))
+        if (User.IsInRole("Admin"))
+        {
+            <div class="col-md-4 " style="padding-top:40px">
+                <div class="card card-body-project wide ">
+                    <div class="card-title navbar-brand" style="background: #5B7065;  color:#d5d5db; height: 40px; text-align: center; padding-top: 10px; font-size:15px; width:100%"> @project.ProjectName</div>
+                    <div class="card ">
+                        <img src="~/UploadedFile/iconfinder_18333_folder_grey_icon_128px.png" class="card-img-top center-block">
+                        <div class="card-body">
+                            <div class="btn-group  " role="group" style="width:100% ">
+                                <a href="/Bug/ListBugs/@project.Id" class="btn btn-primary  " style="width:50%">GO</a>
+
+                                <a href="/Projects/Details/@project.Id" class="btn btn-primary" style="width:50%">Details</a>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else if (project.Users.Contains(ViewBag.Users))
         {
             <div class="col-md-4 " style="padding-top:40px">
                 <div class="card card-body-project wide ">

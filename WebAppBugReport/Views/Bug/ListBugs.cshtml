@@ -9,10 +9,7 @@
 
 <h2 style="padding-top:30px">
     Bugs List @*🅱🆄🅶🅱🆄🅽🆃🅴🆁*@
-    @if (User.IsInRole("QA Engineer"))
-    {
-        <a href="/Bug/Create/@ViewBag.ProjectId" class="btn"><i class="fa fa-plus btn-lg"></i></a>
-    }
+    <a href="/Bug/Create/@ViewBag.ProjectId" class="btn"><i class="fa fa-plus btn-lg"></i></a>
 </h2>
 
 
@@ -27,8 +24,12 @@
             <div style="padding-bottom:20px; font-size:16px">@status.Name</div>
 
 
+
             @foreach (var item in Model.Bugs)
             {
+
+
+
                 if (item.StatusId == @status.Id)
                 {
 
@@ -61,24 +62,24 @@
 
 
 
-                        <div class="row" >
-                            
-                            <div class="col-md-2 card-elem-padding-img" >
-                                <i class="bi bi-images img-button" src="@item.BugImg"  style="cursor:pointer; font-size:30px; "></i>
+                        <div class="row">
+
+                            <div class="col-md-2 card-elem-padding-img">
+                                <i class="bi bi-images img-button" src="@item.BugImg" style="cursor:pointer; font-size:30px; "></i>
                             </div>
 
 
                             <div class=" col-md-7 card-elem-padding-details">
                                 <button type="button" class="btn btn-primary form-control open-details-modal" data-toggle="modal" style="background:#336B87;" data-whatever="@item.Id">Details  </button>
 
-                                <div class="modal fade details-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+                                <div class="modal fade details-modal" tabindex="-1" role="dialog" aria-hidden="true">
                                     <div class="modal-dialog modal-xl" role="document" style="min-width:1300px; min-height:2600px">
                                         <div class="modal-content">
                                             @foreach (var bug in Model.Bugs.Where(p => p.Id == @item.Id))
                                             {
                                                 using (Html.BeginForm("ChangeBug", "Bug", FormMethod.Post, new { enctype = "multipart/form-data" }))
                                                 {
-                                                    <div class="modal-header  modal-bug-header " >
+                                                    <div class="modal-header  modal-bug-header ">
                                                         <div class="row">
                                                             <div class="col-md-4 padding-header-bug" style="padding:15px 0 0 40px">
                                                                 <h5 class="modal-title">Bug # @bug.Id   <br />  Priority: @bug.Priority.Name</h5>
@@ -87,13 +88,13 @@
                                                                 <img src="~/UploadedFile/LOGO_Prodaction.png" class="d-inline-block " style="width:300px; padding-left:10px ">
                                                             </div>
                                                             <div class="col-md-2">
-                                                                <h5 >@bug.Date</h5>
+                                                                <h5>@bug.Date</h5>
                                                             </div>
                                                         </div>
-                                                        
-                                                        
+
+
                                                     </div>
-                                                    <div class="modal-body" style="        background-color: white">
+                                                    <div class="modal-body" style="background-color: white">
                                                         <div class="row top-padd-input label-style">
                                                             <input class="form-control input-max-width" type="hidden" name="StatusId" value="@bug.StatusId" />
                                                             <input class="form-control input-max-width" type="hidden" name="ProjectId" value="@bug.ProjectId" />
@@ -133,7 +134,11 @@
 
                                                             <div class="col-md-3 ">
                                                                 <label class="control-label">Image</label>
-                                                                <img class="form-control img-button" src="@bug.BugImg" style="width:auto; min-height:160px; max-height:160px;  cursor:pointer;" />
+                                                                @if(bug.BugImg != null)
+                                                                {
+                                                                     <img class="form-control img-button" src="@bug.BugImg" style="width:auto; min-height:160px; max-height:160px;  cursor:pointer;" />
+                                                                }
+                                                                
                                                                 <input type="file" name="UploadFile" class="form-control " />
                                                                 <input type="hidden" name="BugImg" value="@bug.BugImg" />
                                                             </div>
@@ -150,26 +155,26 @@
 
 
                                                     </div>
-                                                    <div class="modal-footer" >
+                                                    <div class="modal-footer">
                                                         <div class="row">
                                                             <div class="col-md-1">
-                                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+                                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteBug" data-whatever="@bug.Id">Delete</button>
                                                             </div>
                                                             <div class="col-md-offset-9 col-md-1">
                                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                                             </div>
                                                             <div class=" col-md-1">
-                                                                <button type="submit" class="btn btn-primary" >Change</button>
+                                                                <button type="submit" class="btn btn-primary">Change</button>
                                                             </div>
                                                         </div>
-                                                        
+
 
                                                     </div>
                                                 }
 
                                             }
 
-                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -177,7 +182,7 @@
 
 
 
-                            <div class="col-md-3 card-elem-padding-photo"  data-toggle="tooltip" title="Assigned to @item.User.Name">
+                            <div class="col-md-3 card-elem-padding-photo" data-toggle="tooltip" title="Assigned to @item.User.Name">
                                 @if (@item.User.ProfileImg != null)
                                 {
                                     <img class=" img-circle " src="@item.User.ProfileImg" style=" width:30px; height:auto; float:left; display: inline-block;  cursor:pointer; image-rendering: optimizeSpeed;">
@@ -200,6 +205,28 @@
         </div>
     </div>
 }
+
+
+<div class="modal fade" id="deleteBug" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content" @*style="border-radius:10px"*@>
+            <div class="modal-header" style="background-color:white; border-radius:20px 20px 0 0">
+                <h5 class="modal-title">Delete</h5>
+            </div>
+            <form method="post" action="/Bug/DeleteBug">
+                <div class="modal-body">
+                  Do you confirm that you want to remove the bug from the project?
+                    <input type="hidden" name="Id" />
+                </div>
+                <div class="modal-footer" style="background-color:white; border-radius:0 0 20px 20px">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 
 
@@ -282,10 +309,10 @@
 
             return color;
         };
-        
 
-      
-        var elementAvatar = document.getElementsByClassName('avatar');  
+
+
+        var elementAvatar = document.getElementsByClassName('avatar');
 
         for (var i = 0; i < elementAvatar.length; i++) {
             var name = elementAvatar[i].getAttribute("name");
@@ -311,6 +338,17 @@
                 this.style.height = this.scrollHeight + "px";
             }
         });
+    </script>
+
+
+
+    <script>
+        $('#deleteBug').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var recipient = button.data('whatever')
+            var modal = $(this)
+            modal.find('.modal-body input').val(recipient)
+        })
     </script>
 
 

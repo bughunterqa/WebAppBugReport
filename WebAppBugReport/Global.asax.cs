@@ -14,7 +14,8 @@ namespace WebAppBugReport
     {
         protected void Application_Start()
         {
-            //Database.SetInitializer(new DbInitializer());
+            /*Database.SetInitializer(new DbInitializer());*/
+
 
 
             AreaRegistration.RegisterAllAreas();

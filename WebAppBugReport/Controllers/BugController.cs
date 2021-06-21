@@ -75,21 +75,67 @@ namespace WebAppBugReport.Controllers
         [HttpGet]
         public ActionResult Create(int? id)
         {
+
+
+
             ViewBag.PriorityId = new SelectList(db.Priorities, "Id", "Name");
-            ViewBag.StatusId = new SelectList(db.Statuses, "Id", "Name");
-            ViewBag.UserId = new SelectList(db.Users, "Id", "Name");
             ViewBag.ProjectId = id;
+
+
+
+            User use = db.Users.Where(p => p.Email == User.Identity.Name).FirstOrDefault();
+            List<Project> projects = db.Projects.ToList();
+            List<Project> finalListProj = new List<Project>();
+            foreach (Project finalProj in projects)
+            {
+                if (finalProj.Users.Contains(use))
+                {
+                    finalListProj.Add(finalProj);
+                }
+            }
+            ViewBag.Projects = finalListProj;
+
+
+
+
+
+
+
+
+            Project project = db.Projects.Find(id);
+            List<User> users = db.Users
+                .Where(p=>p.RoleId == 2)
+                .ToList();
+            List<User> finalList = new List<User>();
+            foreach(User user in users)
+            {
+                if (user.Projects.Contains(project))
+                {
+                    finalList.Add(user);
+                }
+            }
+            ViewBag.Users = finalList;
+            
+
+
+
+
             return View();
+        
+        
         }
 
         [HttpPost]
-        [Authorize(Roles = "QA Engineer")]
+        [Authorize]
         public ActionResult Create(Bug bug)
         {
             ViewBag.PriorityId = new SelectList(db.Priorities, "Id", "Name");
+            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "ProjectName");
             ViewBag.StatusId = new SelectList(db.Statuses, "Id", "Name");
             ViewBag.UserId = new SelectList(db.Users, "Id", "Name");
             bug.Date = DateTime.Now;
+            bug.Updated = DateTime.Now;
+            bug.StatusId = 1;
 
             string strDateTime = DateTime.Now.ToString("ddMMyyyyHHMMss");
             string finalPath = "\\UploadedFile\\" + strDateTime + bug.UploadFile.FileName;
@@ -169,12 +215,7 @@ namespace WebAppBugReport.Controllers
                 bug.UploadFile.SaveAs(Server.MapPath("~") + finalPath);
                 bug.BugImg = finalPath;
             }
-
-
-
-
-
-                  
+   
 
             if (ModelState.IsValid)
             {
@@ -187,8 +228,14 @@ namespace WebAppBugReport.Controllers
 
         }
 
-
-
+        [HttpPost]
+        public ActionResult DeleteBug(int id)
+        {
+            Bug bug = db.Bugs.Find(id);
+            db.Bugs.Remove(bug);
+            db.SaveChanges();
+            return RedirectToAction("ListBugs", new { id = bug.ProjectId });
+        }
 
 
     }

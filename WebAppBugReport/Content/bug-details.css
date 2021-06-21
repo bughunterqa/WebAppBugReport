@@ -1,4 +1,8 @@
-﻿.input-max-width{
+﻿body {
+    height: 400px
+}
+
+.input-max-width{
     max-width:100%;
 }
 
@@ -29,13 +33,17 @@
     padding: 0
 }
 
+.modal-header {
+    background: #262F34;
+}
+
 .modal-footer {
     background: #262F34;
 }
 
 
 .modal-body {
-    background-color: #F1D3BC;
+    background-color: white;
 }
 
 .area-step {
