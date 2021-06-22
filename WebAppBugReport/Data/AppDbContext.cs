@@ -43,7 +43,6 @@ namespace WebAppBugReport.Data
             db.Statuses.Add(new Status { Name = "Queue" });
             db.Statuses.Add(new Status { Name = "In Progress" });
             db.Statuses.Add(new Status { Name = "In Review" });
-            db.Statuses.Add(new Status { Name = "Not a Bug" });
             db.Statuses.Add(new Status { Name = "Close" });
             
 
@@ -53,10 +52,10 @@ namespace WebAppBugReport.Data
 
 
 
-            User s1 = new User { Id = 1, Name = "Vladislav", Email = "testet@tester.com", Password = "Test123!", RoleId = 3 };
-            User s2 = new User { Id = 2, Name = "Maria", Email = "dev@dev.com", Password = "Test123!", RoleId = 1 };
-            User s3 = new User { Id = 3, Name = "Denis", Email = "random@random.com", Password = "Test123!", RoleId = 2 };
-            User s4 = new User { Id = 4, Name = "Nastya", Email = "initial@initial.com", Password = "Test123!", RoleId = 2 };
+            User s1 = new User { Id = 1, Name = "Admin", Email = "admin@admin.com", Password = "Test123!", RoleId = 3 };
+            User s2 = new User { Id = 2, Name = "Developer", Email = "dev@dev.com", Password = "Test123!", RoleId = 2 };
+            User s3 = new User { Id = 3, Name = "Denis", Email = "random@random.com", Password = "Test123!", RoleId = 1 };
+            User s4 = new User { Id = 4, Name = "Nastya", Email = "initial@initial.com", Password = "Test123!", RoleId = 1 };
 
             db.Users.Add(s1);
             db.Users.Add(s2);

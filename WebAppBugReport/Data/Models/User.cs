@@ -11,7 +11,7 @@ namespace WebAppBugReport.Data.Models
     {
         public int Id { get; set; }
              
-        [Display(Name = "Assigned to")]
+        [Display(Name = "Name")]
         public string Name { get; set; }
         public string Email { get; set; }    
         public string Password { get; set; }

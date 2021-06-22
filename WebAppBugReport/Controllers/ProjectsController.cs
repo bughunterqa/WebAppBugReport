@@ -13,6 +13,7 @@ namespace WebAppBugReport.Controllers
 {
     public class ProjectsController : Controller
     {
+        
         AppDbContext db = new AppDbContext();
 
         [Authorize]

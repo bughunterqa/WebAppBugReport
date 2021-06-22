@@ -75,25 +75,34 @@ namespace WebAppBugReport.Controllers
         [HttpGet]
         public ActionResult Create(int? id)
         {
-
-
-
-            ViewBag.PriorityId = new SelectList(db.Priorities, "Id", "Name");
-            ViewBag.ProjectId = id;
-
-
-
-            User use = db.Users.Where(p => p.Email == User.Identity.Name).FirstOrDefault();
-            List<Project> projects = db.Projects.ToList();
-            List<Project> finalListProj = new List<Project>();
-            foreach (Project finalProj in projects)
+            if(id != null)
             {
-                if (finalProj.Users.Contains(use))
-                {
-                    finalListProj.Add(finalProj);
-                }
+                Project project1 = db.Projects.Find(id);
+                ViewBag.ProjectName = project1.ProjectName;
+                ViewBag.ProjectId = id;
             }
-            ViewBag.Projects = finalListProj;
+            else
+            {
+                User use = db.Users.Where(p => p.Email == User.Identity.Name).FirstOrDefault();
+                List<Project> projects = db.Projects.ToList();
+                List<Project> finalListProj = new List<Project>();
+                foreach (Project finalProj in projects)
+                {
+                    if (finalProj.Users.Contains(use))
+                    {
+                        finalListProj.Add(finalProj);
+                    }
+                }
+               
+                ViewBag.ProjectId = new SelectList(finalListProj, "Id", "ProjectName");
+                ViewBag.ProjectName = null;
+            }
+
+
+
+
+
+
 
 
 
@@ -115,8 +124,8 @@ namespace WebAppBugReport.Controllers
                 }
             }
             ViewBag.Users = finalList;
-            
 
+            ViewBag.PriorityId = new SelectList(db.Priorities, "Id", "Name");
 
 
 
@@ -129,24 +138,48 @@ namespace WebAppBugReport.Controllers
         [Authorize]
         public ActionResult Create(Bug bug)
         {
-            ViewBag.PriorityId = new SelectList(db.Priorities, "Id", "Name");
-            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "ProjectName");
-            ViewBag.StatusId = new SelectList(db.Statuses, "Id", "Name");
-            ViewBag.UserId = new SelectList(db.Users, "Id", "Name");
-            bug.Date = DateTime.Now;
-            bug.Updated = DateTime.Now;
-            bug.StatusId = 1;
+            
+                ViewBag.PriorityId = new SelectList(db.Priorities, "Id", "Name");
+                ViewBag.StatusId = new SelectList(db.Statuses, "Id", "Name");
+                ViewBag.ProjectId = new SelectList(db.Projects, "Id", "ProjectName", bug.ProjectId);
+                ViewBag.UserId = new SelectList(db.Users, "Id", "Name");
+                bug.Date = DateTime.Now;
+                bug.Updated = DateTime.Now;
+                bug.StatusId = 1;
 
-            string strDateTime = DateTime.Now.ToString("ddMMyyyyHHMMss");
-            string finalPath = "\\UploadedFile\\" + strDateTime + bug.UploadFile.FileName;
+                string strDateTime = DateTime.Now.ToString("ddMMyyyyHHMMss");
+                string finalPath;
 
-            bug.UploadFile.SaveAs(Server.MapPath("~") + finalPath);
-            bug.BugImg = finalPath;
+                if (bug.UploadFile != null)
+                {
+                    finalPath = "\\UploadedFile\\" + strDateTime + bug.UploadFile.FileName;
+                    bug.UploadFile.SaveAs(Server.MapPath("~") + finalPath);
+                    bug.BugImg = finalPath;
+                }
+                else
+                    bug.BugImg = null;
+
+                if (bug.UserId == null)
+                    bug.UserId = null;
+
+                if (!string.IsNullOrEmpty(bug.Summary) && bug.Summary.Length < 200 )
+                {
+                    db.Bugs.Add(bug);
+                    db.SaveChanges();
+
+                    return RedirectToAction("ListBugs", new { id = bug.ProjectId });
+                }
+               
 
 
-            db.Bugs.Add(bug);
-            db.SaveChanges();
-            return RedirectToAction("ListBugs", new { id = bug.ProjectId });
+
+
+
+
+
+
+
+            return View(bug);
         }
 
 

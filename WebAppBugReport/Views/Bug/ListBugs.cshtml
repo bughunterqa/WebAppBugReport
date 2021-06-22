@@ -2,6 +2,7 @@
 <link href="@Url.Content("~/Content/bug-details.css")" rel="stylesheet" type="text/css" />
 
 
+
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -63,10 +64,22 @@
 
 
                         <div class="row">
-
+                            @if(item.BugImg != null)
+                            {
                             <div class="col-md-2 card-elem-padding-img">
-                                <i class="bi bi-images img-button" src="@item.BugImg" style="cursor:pointer; font-size:30px; "></i>
+                                <i class="bi bi-image img-button" src="@item.BugImg" style="cursor:pointer; font-size:30px; "></i>
                             </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-2 card-elem-padding-img "   data-toggle="tooltip" title="No attachment">
+                                    <i class="bi bi-question-octagon" src="@item.BugImg" style="cursor:help; font-size:30px; "></i>
+                                </div>
+                            }
+
+
+
+
 
 
                             <div class=" col-md-7 card-elem-padding-details">
@@ -180,19 +193,31 @@
                             </div>
 
 
+                            @if(item.UserId != null)
+                            {
+                                <div class="col-md-3 card-elem-padding-photo" data-toggle="tooltip" title="Assigned to @item.User.Name">
+                                    @if (@item.User.ProfileImg != null)
+                                    {   <figure >
+                                            <img class="img-circle " src="@item.User.ProfileImg" style="  float:left; display: inline-block;  cursor:pointer; image-rendering: optimizeSpeed;">
+                                        </figure>
+                                    }
+                                    else
+                                    {
+                                        <div class="user-info-avatar avatar" name="@item.User.Name" style=" cursor:pointer;"></div>
+                                    }
+
+                                </div>
+                            }
+                            else
+                            {
+                                 <div class="col-md-3 card-elem-padding-photo" data-toggle="tooltip" title="No assigned user">
+                                     <i class="bi bi-exclamation-diamond" style="cursor:help; font-size:30px; "></i>
+                                 </div>
+                            }
 
 
-                            <div class="col-md-3 card-elem-padding-photo" data-toggle="tooltip" title="Assigned to @item.User.Name">
-                                @if (@item.User.ProfileImg != null)
-                                {
-                                    <img class=" img-circle " src="@item.User.ProfileImg" style=" width:30px; height:auto; float:left; display: inline-block;  cursor:pointer; image-rendering: optimizeSpeed;">
-                                }
-                                else
-                                {
-                                    <div class="user-info-avatar avatar" name="@item.User.Name" style=" cursor:pointer;"></div>
-                                }
 
-                            </div>
+
                         </div>
 
 
