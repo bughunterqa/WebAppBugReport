@@ -16,13 +16,12 @@ namespace WebAppBugReport.Controllers
     {
         AppDbContext db = new AppDbContext();
 
-/*        public ActionResult Index(int id, int? bugStatus, int? assignedDev, int page = 1)
+       /* public ActionResult Index(int id, int? bugStatus, int? assignedDev, int page = 1)
         {
             ViewBag.ProjectId = id;
             int pageSize = 3;
             IEnumerable<Bug> bugsPerPages = db.Bugs
                 .Include(p => p.Priority)
-                .Include(p => p.Result)
                 .Include(p => p.Status)
                 .Include(p => p.User)
                 .Where(p => p.ProjectId == id)
@@ -67,10 +66,14 @@ namespace WebAppBugReport.Controllers
             return View(ivm);
         }*/
 
-/*        public ActionResult GetPagination()
+
+
+        public ActionResult GetPagination()
         {
             return PartialView();
-        }*/
+        }
+
+
 
         [HttpGet]
         public ActionResult Create(int? id)
@@ -97,18 +100,6 @@ namespace WebAppBugReport.Controllers
                 ViewBag.ProjectId = new SelectList(finalListProj, "Id", "ProjectName");
                 ViewBag.ProjectName = null;
             }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
             Project project = db.Projects.Find(id);
@@ -169,16 +160,6 @@ namespace WebAppBugReport.Controllers
 
                     return RedirectToAction("ListBugs", new { id = bug.ProjectId });
                 }
-               
-
-
-
-
-
-
-
-
-
             return View(bug);
         }
 
@@ -192,7 +173,22 @@ namespace WebAppBugReport.Controllers
         {
             List<Status> statuses = db.Statuses.ToList();
 
-            ViewBag.Users = db.Users.ToList();
+            Project project = db.Projects.Find(id);
+            List<User> users = db.Users
+                .Where(p => p.RoleId == 2)
+                .ToList();
+            List<User> finalList = new List<User>();
+            foreach (User user in users)
+            {
+                if (user.Projects.Contains(project))
+                {
+                    finalList.Add(user);
+                }
+            }
+            ViewBag.Users = finalList;
+
+
+            
             ViewBag.Priority = db.Priorities.ToList();
 
 
@@ -205,12 +201,51 @@ namespace WebAppBugReport.Controllers
                 .OrderByDescending(x => x.Updated)
                 .ToList();
 
+
+
+
+
+            List<Bug> newListBug = new List<Bug>();
+
+            foreach(Bug b in bug)
+            {
+                if(b.StatusId == 1 && newListBug.Count < 10)
+                {
+                    newListBug.Add(b);
+                    
+                }
+                if (b.StatusId == 2 && newListBug.Count < 10)
+                {
+                    newListBug.Add(b);
+                }
+                if (b.StatusId == 3 && newListBug.Count < 10)
+                {
+                    newListBug.Add(b);
+                }
+                if (b.StatusId == 4 && newListBug.Count < 10)
+                {
+                    newListBug.Add(b);
+                }
+                if (b.StatusId == 5 && newListBug.Count < 10)
+                {
+                    newListBug.Add(b);
+                }
+
+            }
+
+
+
+
+
+
+
+
             ViewBag.ProjectId = id;
 
             BugList bugList = new BugList
             {
                 Statuses = statuses,
-                Bugs = bug
+                Bugs = newListBug
             };
 
             return View(bugList);
@@ -270,6 +305,96 @@ namespace WebAppBugReport.Controllers
             return RedirectToAction("ListBugs", new { id = bug.ProjectId });
         }
 
+
+
+        public ActionResult MoveToBoard(int id)
+        {
+            Bug bug = db.Bugs.Find(id);
+            bug.Updated = DateTime.Now;
+            db.SaveChanges();
+
+            if(bug.StatusId == 1)
+                return RedirectToAction("AllOpenBugs", new { id = bug.ProjectId });
+            else
+                return RedirectToAction("AllCloseBugs", new { id = bug.ProjectId });
+
+
+        }
+
+
+
+        public ActionResult AllOpenBugs(int id, int page = 1)
+        {
+            ViewBag.ProjectId = id;
+            int pageSize = 10;
+            IEnumerable<Bug> bugsPerPages = db.Bugs
+                .Include(p => p.Priority)
+                .Include(p => p.User)
+                .Where(p => p.ProjectId == id)
+                .Where(b => b.StatusId == 1)
+                .OrderByDescending(x => x.Updated)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+
+            PageInfo pageInfo = new PageInfo
+            {
+                PageNumber = page,
+                PageSize = pageSize,
+                TotalItems = db.Bugs
+                .Where(p => p.ProjectId == id)
+                .Where(b => b.StatusId == 1)
+                .Count()
+            };
+
+            BugPagingViewModel ivm = new BugPagingViewModel
+            {
+                PageInfo = pageInfo,
+                Bugs = bugsPerPages,
+
+            };
+
+
+            return View(ivm);
+        }
+
+
+        public ActionResult AllCloseBugs(int id, int page = 1)
+        {
+            ViewBag.ProjectId = id;
+            int pageSize = 10;
+            IEnumerable<Bug> bugsPerPages = db.Bugs
+                .Include(p => p.Priority)
+                .Include(p => p.User)
+                .Where(p => p.ProjectId == id)
+                .Where(b => b.StatusId == 5)
+                .OrderByDescending(x => x.Updated)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+
+            PageInfo pageInfo = new PageInfo
+            {
+                PageNumber = page,
+                PageSize = pageSize,
+                TotalItems = db.Bugs
+                .Where(p => p.ProjectId == id)
+                .Where(b => b.StatusId == 5)
+                .Count()
+            };
+
+            BugPagingViewModel ivm = new BugPagingViewModel
+            {
+                PageInfo = pageInfo,
+                Bugs = bugsPerPages,
+
+            };
+
+
+            return View(ivm);
+        }
 
     }
 }

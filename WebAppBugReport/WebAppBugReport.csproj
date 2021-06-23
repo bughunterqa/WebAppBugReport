@@ -251,6 +251,8 @@
     <Content Include="Views\Bugs1\Details.cshtml" />
     <Content Include="Views\Bugs1\Edit.cshtml" />
     <Content Include="Views\Bugs1\Index.cshtml" />
+    <Content Include="Views\Bug\AllOpenBugs.cshtml" />
+    <Content Include="Views\Bug\AllCloseBugs.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

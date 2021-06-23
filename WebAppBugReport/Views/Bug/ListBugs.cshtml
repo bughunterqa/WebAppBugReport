@@ -7,17 +7,28 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-<h2 style="padding-top:30px">
-    Bugs List @*🅱🆄🅶🅱🆄🅽🆃🅴🆁*@
+<h2 style="padding:25px 0 0 0; font-weight:bold; opacity:0.9">
+    Bug list
     <a href="/Bug/Create/@ViewBag.ProjectId" class="btn"><i class="fa fa-plus btn-lg"></i></a>
 </h2>
+
+
+<div class="row">
+    <div class=" col-md-3 ">
+        <a class="btn btn-info" href="/Bug/AllOpenBugs/@ViewBag.ProjectId" style="background-color:aliceblue; color:darkslategrey; border:none; border-radius:10px; width:210px"  ><i class="bi bi-arrows-angle-expand"></i> All Open</a>
+    </div>
+    <div class="col-md-offset-6 col-md-2 " style=" padding-left:50px" >
+        <a class="btn btn-danger" href="/Bug/AllCloseBugs/@ViewBag.ProjectId" style="background-color:aliceblue; color:darkslategrey; border:none; border-radius:10px; width:210px; "><i class="bi bi-arrows-angle-expand"></i> All Close</a>
+    </div>
+</div>
+
 
 
 
 
 @foreach (var status in Model.Statuses)
 {
+
     <div class="column-header-test ">
 
 
@@ -36,8 +47,6 @@
 
                     <div class="portlet card-body text-left  " data-id="@item.Id">
                         <div class="portlet-header ard-title ">
-                            @*<img class="img-button  img-circle " src="@item.User.ProfileImg" style=" width:30px; height:auto; float:right;  cursor:pointer;">*@
-
                             <div>
                                 ID# @item.Id
                                 @if (item.Priority.Name == "Low")
@@ -53,10 +62,7 @@
                                     <i class="bi bi-bug " style="cursor:pointer; float:right; color:red " data-toggle="tooltip" data-placement="left" title="Priority: @item.Priority.Name"></i>
                                 }
                             </div>
-
-
                         </div>
-
                         <div class="portlet-content  card-text">@item.Summary</div>
 
 
@@ -64,15 +70,15 @@
 
 
                         <div class="row">
-                            @if(item.BugImg != null)
+                            @if (item.BugImg != null)
                             {
-                            <div class="col-md-2 card-elem-padding-img">
-                                <i class="bi bi-image img-button" src="@item.BugImg" style="cursor:pointer; font-size:30px; "></i>
-                            </div>
+                                <div class="col-md-2 card-elem-padding-img">
+                                    <i class="bi bi-image img-button" src="@item.BugImg" style="cursor:pointer; font-size:30px; "></i>
+                                </div>
                             }
                             else
                             {
-                                <div class="col-md-2 card-elem-padding-img "   data-toggle="tooltip" title="No attachment">
+                                <div class="col-md-2 card-elem-padding-img " data-toggle="tooltip" title="No attachment">
                                     <i class="bi bi-question-octagon" src="@item.BugImg" style="cursor:help; font-size:30px; "></i>
                                 </div>
                             }
@@ -147,11 +153,11 @@
 
                                                             <div class="col-md-3 ">
                                                                 <label class="control-label">Image</label>
-                                                                @if(bug.BugImg != null)
+                                                                @if (bug.BugImg != null)
                                                                 {
-                                                                     <img class="form-control img-button" src="@bug.BugImg" style="width:auto; min-height:160px; max-height:160px;  cursor:pointer;" />
+                                                                    <img class="form-control img-button" src="@bug.BugImg" style="width:auto; min-height:160px; max-height:160px;  cursor:pointer;" />
                                                                 }
-                                                                
+
                                                                 <input type="file" name="UploadFile" class="form-control " />
                                                                 <input type="hidden" name="BugImg" value="@bug.BugImg" />
                                                             </div>
@@ -193,11 +199,11 @@
                             </div>
 
 
-                            @if(item.UserId != null)
+                            @if (item.UserId != null)
                             {
                                 <div class="col-md-3 card-elem-padding-photo" data-toggle="tooltip" title="Assigned to @item.User.Name">
                                     @if (@item.User.ProfileImg != null)
-                                    {   <figure >
+                                    {<figure>
                                             <img class="img-circle " src="@item.User.ProfileImg" style="  float:left; display: inline-block;  cursor:pointer; image-rendering: optimizeSpeed;">
                                         </figure>
                                     }
@@ -210,9 +216,9 @@
                             }
                             else
                             {
-                                 <div class="col-md-3 card-elem-padding-photo" data-toggle="tooltip" title="No assigned user">
-                                     <i class="bi bi-exclamation-diamond" style="cursor:help; font-size:30px; "></i>
-                                 </div>
+                                <div class="col-md-3 card-elem-padding-photo" data-toggle="tooltip" title="No assigned user">
+                                    <i class="bi bi-exclamation-diamond" style="cursor:help; font-size:30px; "></i>
+                                </div>
                             }
 
 
@@ -240,7 +246,7 @@
             </div>
             <form method="post" action="/Bug/DeleteBug">
                 <div class="modal-body">
-                  Do you confirm that you want to remove the bug from the project?
+                    Do you confirm that you want to remove the bug from the project?
                     <input type="hidden" name="Id" />
                 </div>
                 <div class="modal-footer" style="background-color:white; border-radius:0 0 20px 20px">

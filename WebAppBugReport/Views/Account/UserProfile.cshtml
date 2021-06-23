@@ -3,16 +3,25 @@
 <link href="@Url.Content("~/Content/profile-page.css")" rel="stylesheet" type="text/css" />
 
 @{
-    ViewBag.Title = "UserProfile";
+    ViewBag.Title = "User Profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2 class="row-padding">User Profile</h2>
+<h2 style="padding:25px 0; font-weight:bold; opacity:0.9">User Profile</h2>
 <div>
+    @if (ViewBag.Photo != null)
+    {
+        <figure>
+            <img class="img-button  img-circle foto-profile " src="@ViewBag.Photo">
+        </figure>
+    }
+    else
+    {
+        <h2 >
+            You don't have profile foto. For add you should press to Edit button
+        </h2>
+    }
 
-    <figure>
-        <img class="img-button  img-circle foto-profile " src="@ViewBag.Photo">
-    </figure>
 
 
     <hr />

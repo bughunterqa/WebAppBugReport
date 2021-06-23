@@ -1,0 +1,97 @@
+﻿@model WebAppBugReport.Data.Models.BugPagingViewModel
+@using WebAppBugReport.Helpers
+
+<style>
+
+
+    th {
+        background-color: lightgray
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+
+
+    .hover-up {
+        opacity: 0;
+    }
+
+    tr:hover .hover-up {
+        opacity: 1;
+    }
+</style>
+
+@{
+    ViewBag.Title = "All Close Bugs";
+}
+
+<h2 style="padding:25px 0; font-weight:bold; opacity:0.9">Closed bugs</h2>
+
+
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>Summary</th>
+        <th>Priority</th>
+        <th>Assigned to</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Bugs)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td style="width:800px">
+                @Html.DisplayFor(modelItem => item.Summary)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Priority.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.Name)
+            </td>
+
+            <td>
+                <div class="hover-up">
+                    <a href="/Bug/MoveToBoard/@item.Id">
+                        <i class="bi bi-caret-up-square-fill" style="font-size:30px;" data-toggle="tooltip" data-placement="left" title="Move the bug to board"></i>
+                    </a>
+                </div>
+            </td>
+        </tr>
+
+
+
+
+
+    }
+
+</table>
+<br />
+
+<div class="row ">
+    <div class="col-md-9">
+        <p class="row-padding">
+            <a class="btn btn-danger" href="/Bug/ListBugs/@ViewBag.ProjectId" style="background-color:aliceblue; color:darkslategrey; border:none; border-radius:10px; width:150px; "><i class="bi bi-backspace"></i> Back to Board</a>
+        </p>
+    </div>
+    <div class="col-md-3" style="padding:15px 0 0 120px">
+        <div class="btn-group">
+            @Html.PageLinks(Model.PageInfo, x => Url.Action("AllCloseBugs", new { page = x }))
+        </div>
+    </div>
+</div>
+
+
+
+
+@section scripts {
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+}
